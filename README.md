@@ -134,4 +134,8 @@ Now, you should be deployed!
 
 Why do all of these steps? The big reason is because we don't want our production server to be cluttered up with dev dependencies like webpack, but at the same time we don't want our development git-tracking to be cluttered with production build files like bundle.js! By doing these steps, we make sure our development and production environments both stay nice and clean!
 
+<<<<<<< HEAD
+Maryia Miller
+=======
 Jing Cao
+>>>>>>> ffd6baa3a38977b2de249bc04591c81a90a12b44
