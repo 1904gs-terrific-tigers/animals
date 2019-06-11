@@ -7,32 +7,31 @@ import {AllAnimals} from './all-animals'
 const adapter = new Adapter()
 enzyme.configure({adapter})
 
+let animalsData = [
+  {
+    id: 1,
+    name: 'Cody',
+    imageUrl:
+      'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
+    species: 'sloth',
+    pricePerTimeUnit: 1
+  }
+]
+
 describe('AllAnimals', () => {
   let animals
-  let animalsData = [
-    {
-      id: 1,
-      name: 'Cody',
-      imageUrl:
-        'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
-      species: 'sloth',
-      pricePerTimeUnit: 1
-    },
-    {
-      id: 2,
-      name: 'Simba',
-      imageUrl:
-        'https://media.cntraveler.com/photos/53ec0c68976f8f2d44d5ab1e/master/w_420,c_limit/tiger-cubs.jpg',
-      species: 'tiger',
-      pricePerTimeUnit: 2
-    }
-  ]
 
   beforeEach(() => {
-    animals = shallow(<AllAnimals animals={animalsData} />)
+    animals = shallow(
+      <AllAnimals getAnimals={() => {}} animals={animalsData} />
+    )
   })
 
-  it('renders an animal name in an h3', () => {
-    expect(AllAnimals.find('h3').text()).to.be.equal(animals.name)
+  it('renders an animal name in an h2', () => {
+    expect(animals.find('h2').text()).to.be.equal('Cody')
+  })
+
+  it('renders an animal price in an h3', () => {
+    expect(animals.find('h3').text()).to.be.equal('Price: 1')
   })
 })
