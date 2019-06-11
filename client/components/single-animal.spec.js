@@ -34,13 +34,13 @@ describe('Single Animal', () => {
 
   it('renders the image', () => {
     expect(singleAnimal.find('img').prop('src')).to.be.equal(
-      singleAnimal.imageUrl
+      animalData.imageUrl
     )
   })
 
   it('renders the description', () => {
     expect(singleAnimal.find('div.desc').text()).to.be.equal(
-      singleAnimal.description
+      animalData.description
     )
   })
 
@@ -53,10 +53,10 @@ describe('Single Animal', () => {
   it('renders an input with a default of one', () => {
     const input = singleAnimal.find('div.quantity input')
     expect(input.prop('name')).to.be.equal('quantity')
-    expect(input.prop('value')).to.be.equal(1)
+    expect(input.prop('value')).to.be.equal('1')
   })
 
   it('has a button to add to cart', () => {
-    expect(singleAnimal.find('button')).to.not.be.undefined()
+    expect(singleAnimal.find('button')).to.have.lengthOf(1)
   })
 })
