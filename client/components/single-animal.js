@@ -1,13 +1,18 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
+import React from 'react'
 
 //component
 
 export const SingleAnimal = props => {
-  return (
-    <div>
-      <h2>Animal Placeholder</h2>
-    </div>
-  )
+  return <div />
+}
+
+SingleAnimal.propTypes = {
+  id: PropTypes.number,
+  name: PropTypes.string,
+  imageUrl: PropTypes.string,
+  description: PropTypes.string,
+  species: PropTypes.string,
+  pricePerTimeUnit: PropTypes.number,
+  timeUnit: PropTypes.number
 }
