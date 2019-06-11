@@ -14,7 +14,6 @@ describe('UserHome', () => {
 
   beforeEach(() => {
     userHome = shallow(<UserHome email="cody@email.com" />)
-    console.log('userHome from test', userHome)
   })
 
   it('renders the email in an h3', () => {
