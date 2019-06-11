@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useEffect} from 'react'
+import {connect} from 'react-redux'
+import {getAnimal} from '../store'
 
 //component
 
 export const SingleAnimal = props => {
+  useEffect(() => {
+    props.getAnimal(props.match.params.animalId)
+  }, [])
   return (
     <div>
       <h1>{props.name}</h1>
@@ -22,13 +27,23 @@ export const SingleAnimal = props => {
           <label htmlFor="quantity">Quantity:</label>
         </span>
         <span>
-          <input id="quantity" name="quantity" value="1" type="number" />
+          <input id="quantity" name="quantity" defaultValue="1" type="number" />
         </span>
       </div>
       <button type="submit">Add to Cart</button>
     </div>
   )
 }
+
+const mapStateToProps = state => ({
+  ...state.animal
+})
+
+const mapDispatchToProps = dispatch => ({
+  getAnimal: id => dispatch(getAnimal(id))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleAnimal)
 
 SingleAnimal.propTypes = {
   id: PropTypes.number,
