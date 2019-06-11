@@ -5,7 +5,6 @@ const app = require('../index')
 const Animal = db.model('animal')
 
 //all items tests
-
 //single items tests
 
 describe('/api/animals/id', () => {
@@ -29,11 +28,10 @@ describe('/api/animals/id', () => {
       .get(`/api/animals/${id}`)
       .expect(200)
 
-    expect(res.body).to.be.an('array')
-    expect(res.body).to.have.length(1)
-    expect(res.body[0].id).to.equal(id)
-    expect(res.body[0].name).to.equal(animal.name)
-    expect(res.body[0].imageUrl).to.equal(animal.imageUrl)
-    expect(res.body[0].description).to.equal(animal.description)
+    expect(res.body).to.be.an('object')
+    expect(res.body.id).to.equal(id)
+    expect(res.body.name).to.equal(animal.name)
+    expect(res.body.imageUrl).to.equal(animal.imageUrl)
+    expect(res.body.description).to.equal(animal.description)
   })
 })
