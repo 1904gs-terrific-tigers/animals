@@ -23,4 +23,16 @@ describe('Single Animal', () => {
   beforeEach(() => {
     singleAnimal = shallow(<SingleAnimal {...animalData} />)
   })
+  it('renders the name in an h1', () => {
+    expect(singleAnimal.find('h1').text()).to.be.equal(animalData.name)
+  })
+  it('renders the species in an h3', () => {
+    expect(singleAnimal.find('h3').text()).to.be.equal(animalData.species)
+  })
+  it('renders the image', () => {
+    expect(singleAnimal.find('img').prop('src')).to.be.equal(
+      singleAnimal.imageUrl
+    )
+  })
+  it('renders the description', () => {})
 })
