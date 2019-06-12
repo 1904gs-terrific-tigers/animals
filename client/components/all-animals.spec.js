@@ -74,4 +74,13 @@ describe('AllAnimals', () => {
         .text()
     ).to.contain(animalsData[0].price)
   })
+
+  it('should have a button', () => {
+    expect(
+      animals
+        .find('button')
+        .first()
+        .text()
+    ).to.be.equal('Add to Cart')
+  })
 })
