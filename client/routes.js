@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types'
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {withRouter, Route, Switch} from 'react-router-dom'
-import {Login, Signup, UserHome, AllAnimals} from './components'
-import SingleAnimal from './components/single-animal'
+import {Route, Switch, withRouter} from 'react-router-dom'
+import {AllAnimals, Login, Signup, SingleAnimal, UserHome} from './components'
 import {me} from './store'
 
 /**
