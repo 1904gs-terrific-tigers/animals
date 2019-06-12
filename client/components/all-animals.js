@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {gettingAnimals} from '../store/animals'
 
@@ -19,6 +18,7 @@ export class AllAnimals extends React.Component {
             <h2>{animal.name}</h2>
             <img src={animal.imageUrl} />
             <h3>Price: {animal.price}</h3>
+            <button type="submit">Add to Cart</button>
           </div>
         ))}
       </div>
