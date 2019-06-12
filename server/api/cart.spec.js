@@ -4,10 +4,7 @@ const {expect} = require('chai')
 const request = require('supertest')
 const db = require('../db')
 const app = require('../index')
-const User = db.model('user')
-const Order = db.model('order')
-const AnimalOrder = db.model('animalOrder')
-const Animal = db.model('animal')
+const {User, Order, AnimalOrder, Animal} = require('../db/models')
 
 describe('Cart routes', () => {
   let dummyUser, dummyOrder, dummyAnimal
@@ -35,7 +32,7 @@ describe('Cart routes', () => {
 
   describe('/api/cart/', () => {
     beforeEach(async () => {
-      dummyOrder.addAnimal(dummyAnimal, {
+      await dummyOrder.addAnimal(dummyAnimal, {
         through: {
           quantity: 10,
           price: dummyAnimal.price
