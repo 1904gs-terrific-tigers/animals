@@ -38,6 +38,7 @@ describe('Animal routes', () => {
         .expect(200)
 
       expect(res.body).to.be.an('array')
+      expect(res.body).to.have.lengthOf(2)
 
       expect(res.body[0].name).to.be.equal(codyData.name)
       expect(res.body[0].imageUrl).to.be.equal(codyData.imageUrl)
