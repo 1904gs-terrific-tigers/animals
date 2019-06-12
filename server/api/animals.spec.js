@@ -18,7 +18,7 @@ describe('Animal routes', () => {
       species: 'dog',
       imageUrl:
         'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
-      price: 1.0
+      price: 100
     }
 
     const lolaData = {
@@ -43,6 +43,10 @@ describe('Animal routes', () => {
       expect(res.body[0].name).to.be.equal(codyData.name)
       expect(res.body[0].imageUrl).to.be.equal(codyData.imageUrl)
       expect(res.body[1].name).to.be.equal(lolaData.name)
+      expect(res.body[0].price).to.be.equal(codyData.price)
+      expect(res.body[1].price).to.be.equal(lolaData.price)
+      expect(res.body[0].species).to.be.equal(codyData.species)
+      expect(res.body[1].species).to.be.equal(lolaData.species)
       expect(res.body[1].imageUrl).to.exist
     })
   }) // end describe('/api/animals')
@@ -74,6 +78,8 @@ describe('Animal routes', () => {
       expect(res.body.name).to.equal(animal.name)
       expect(res.body.imageUrl).to.equal(animal.imageUrl)
       expect(res.body.description).to.equal(animal.description)
+      expect(res.body.price).to.be.equal(animal.price)
+      expect(res.body.species).to.be.equal(animal.species)
     })
   })
 })
