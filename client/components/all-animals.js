@@ -18,7 +18,7 @@ export class AllAnimals extends React.Component {
           <div key={animal.id}>
             <h2>{animal.name}</h2>
             <img src={animal.imageUrl} />
-            <h3>Price: {animal.pricePerTimeUnit}</h3>
+            <h3>Price: {animal.price}</h3>
           </div>
         ))}
       </div>

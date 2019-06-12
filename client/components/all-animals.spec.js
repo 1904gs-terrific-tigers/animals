@@ -15,14 +15,14 @@ let animalsData = [
     imageUrl:
       'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
     species: 'sloth',
-    pricePerTimeUnit: 1
+    price: 1
   },
   {
     id: 2,
     name: 'Spend time with catboat',
     imageUrl: 'http://catbo.at/catboat.jpg',
     species: 'catboat',
-    pricePerTimeUnit: 100
+    price: 100
   }
 ]
 
@@ -72,6 +72,6 @@ describe('AllAnimals', () => {
         .find('h3')
         .first()
         .text()
-    ).to.contain(animalsData[0].pricePerTimeUnit)
+    ).to.contain(animalsData[0].price)
   })
 })
