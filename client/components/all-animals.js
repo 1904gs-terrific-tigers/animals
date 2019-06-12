@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {gettingAnimals} from '../store/animals'
 
 export class AllAnimals extends React.Component {
@@ -13,14 +14,21 @@ export class AllAnimals extends React.Component {
   render() {
     return (
       <div>
-        {this.props.animals.map(animal => (
-          <div key={animal.id}>
-            <h2>{animal.name}</h2>
-            <img src={animal.imageUrl} />
-            <h3>Price: {animal.price}</h3>
-            <button type="submit">Add to Cart</button>
-          </div>
-        ))}
+        {this.props.animals.map(animal => {
+          const animalUrl = `/animals/${animal.id}`
+          return (
+            <div key={animal.id}>
+              <Link to={animalUrl}>
+                <h2>{animal.name}</h2>
+              </Link>
+              <Link to={animalUrl}>
+                <img src={animal.imageUrl} />
+              </Link>
+              <h3>Price: {animal.price}</h3>
+              <button type="submit">Add to Cart</button>
+            </div>
+          )
+        })}
       </div>
     )
   }
