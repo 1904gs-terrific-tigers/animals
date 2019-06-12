@@ -21,7 +21,7 @@ describe('thunk creators', () => {
       'https://www.telegraph.co.uk/content/dam/news/2017/11/30/TELEMMGLPICT000148018716_trans_NvBQzQNjv4BqutIaqbtdgycbjoKap7Ft85iru5ESH6waxLG5-q_DX4Y.jpeg?imwidth=450',
     description: 'Spend an time with the famous Tony the Tiger',
     species: 'Tiger',
-    pricePerTimeUnit: 100,
+    price: 100,
     timeUnit: 60
   }
 

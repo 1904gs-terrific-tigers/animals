@@ -19,7 +19,7 @@ export const SingleAnimal = props => {
       </div>
       <div className="pricing">
         <p>
-          ${props.pricePerTimeUnit} / {props.timeUnit} min
+          ${props.price} / {props.timeUnit} min
         </p>
       </div>
       <div className="quantity">
@@ -51,6 +51,6 @@ SingleAnimal.propTypes = {
   imageUrl: PropTypes.string,
   description: PropTypes.string,
   species: PropTypes.string,
-  pricePerTimeUnit: PropTypes.number,
+  price: PropTypes.number,
   timeUnit: PropTypes.number
 }

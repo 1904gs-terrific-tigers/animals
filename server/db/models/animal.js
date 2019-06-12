@@ -23,7 +23,7 @@ const Animal = db.define('animal', {
     defaultValue: 60
   },
   // price is in dollars
-  pricePerTimeUnit: {
+  price: {
     type: Sequelize.INTEGER,
     allowNull: false
   }

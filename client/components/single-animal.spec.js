@@ -16,7 +16,7 @@ describe('Single Animal', () => {
       'https://www.telegraph.co.uk/content/dam/news/2017/11/30/TELEMMGLPICT000148018716_trans_NvBQzQNjv4BqutIaqbtdgycbjoKap7Ft85iru5ESH6waxLG5-q_DX4Y.jpeg?imwidth=450',
     description: 'Spend an time with the famous Tony the Tiger',
     species: 'Tiger',
-    pricePerTimeUnit: 100,
+    price: 100,
     timeUnit: 60
   }
 
@@ -45,9 +45,7 @@ describe('Single Animal', () => {
   })
 
   it('renders the pricing with correct information somehow', () => {
-    expect(singleAnimal.find('div.pricing').text()).to.contain(
-      animalData.pricePerTimeUnit
-    )
+    expect(singleAnimal.find('div.pricing').text()).to.contain(animalData.price)
     expect(singleAnimal.find('div.pricing').text()).to.contain(
       animalData.timeUnit
     )

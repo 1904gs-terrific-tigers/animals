@@ -19,7 +19,7 @@ async function seed() {
       imageUrl:
         'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
       species: 'sloth',
-      pricePerTimeUnit: 1
+      price: 1
     }),
     Animal.create({
       id: 2,
@@ -27,7 +27,7 @@ async function seed() {
       imageUrl:
         'https://media.cntraveler.com/photos/53ec0c68976f8f2d44d5ab1e/master/w_420,c_limit/tiger-cubs.jpg',
       species: 'tiger',
-      pricePerTimeUnit: 2
+      price: 2
     })
   ])
 

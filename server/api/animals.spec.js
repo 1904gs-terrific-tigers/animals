@@ -18,13 +18,13 @@ describe('Animal routes', () => {
       species: 'dog',
       imageUrl:
         'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
-      pricePerTimeUnit: 1.0
+      price: 1.0
     }
 
     const lolaData = {
       name: 'Cuddle with Lola',
       species: 'cat',
-      pricePerTimeUnit: 100
+      price: 100
     }
 
     beforeEach(async () => {
@@ -55,7 +55,7 @@ describe('Animal routes', () => {
         'https://www.telegraph.co.uk/content/dam/news/2017/11/30/TELEMMGLPICT000148018716_trans_NvBQzQNjv4BqutIaqbtdgycbjoKap7Ft85iru5ESH6waxLG5-q_DX4Y.jpeg?imwidth=450',
       description: 'Spend time with the famous Tony the Tiger',
       species: 'Tiger',
-      pricePerTimeUnit: 100
+      price: 100
     }
 
     let tony
