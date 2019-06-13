@@ -10,7 +10,7 @@ const isLoggedIn = (req, res, next) => {
     res.json({error: 'Must be logged in to do that.'})
     return
   }
-  //if a user is logged in ; we're happy ; keep going
+  //if a user is logged in ; we're happy
   if (user) {
     next()
   }
@@ -48,7 +48,6 @@ router.post('/:animalId', async (req, res, next) => {
     // and the attached animalOrder with the correct quantity
     const [cart, created] = await Order.getCurrentOrderForUserId(req.user.id)
     await cart.addAnimalQuantity(+req.params.animalId, req.body.quantity)
-
     res.sendStatus(204)
   } catch (error) {
     switch (error) {
@@ -85,7 +84,13 @@ router.put('/:animalId', async (req, res, next) => {
     await order.setAnimalQuantity(req.params.animalId, req.body.quantity)
     res.sendStatus(204)
   } catch (error) {
-    next(error)
+    switch (error) {
+      case Order.AnimalDoesNotExistError:
+        res.json({error: Order.AnimalDoesNotExistError})
+        break
+      default:
+        next(error)
+    }
   }
 })
 
