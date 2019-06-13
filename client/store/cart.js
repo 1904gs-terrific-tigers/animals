@@ -55,17 +55,6 @@ export const getCart = () => {
   }
 }
 
-// export const getCart = () => {
-//     return dispatch => {
-//       try {
-
-//         dispatch(gotCart(fakeState))
-//       } catch (err) {
-//         console.error(err)
-//       }
-//     }
-//   }
-
 export const updateCart = (id, qt) => {
   return async dispatch => {
     try {
@@ -98,16 +87,6 @@ export const remove = id => {
     }
   }
 }
-// export const remove = id => {
-//     return dispatch => {
-//         try {
-
-//             dispatch(removeItem(id))
-//         } catch (error) {
-//             console.error(error)
-//         }
-//     }
-// }
 
 /**
  * REDUCER
