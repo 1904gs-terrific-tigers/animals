@@ -17,11 +17,10 @@ export class Cart extends Component {
   handleChange(event) {
     this.props.updatingCart(Number(event.target.id), Number(event.target.value))
   }
-
   render() {
     return (
       <div>
-        <button type="submit">Remove</button>
+        <button type="submit">Remove Item</button>
         {this.props.cart.map(item => (
           <div key={item.id}>
             <CartItem animal={item} />
