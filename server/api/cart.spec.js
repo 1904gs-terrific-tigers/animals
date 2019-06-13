@@ -151,7 +151,7 @@ describe('Cart routes', () => {
 
         // we expect some 400-series error because not allowed
         const res = await agent.put('/api/cart').expect(412)
-        // we expect an error to be in the body some with some message
+        // we expect an error to be in the body with some message
         expect(res.body.error).to.exist
 
         // and now let's check to make sure it didn't do anything

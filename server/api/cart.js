@@ -66,16 +66,13 @@ router.post('/:animalId', async (req, res, next) => {
 router.put('/', async (req, res, next) => {
   try {
     const userId = req.user.id
-    const order = await Order.findOne({
-      where: {
-        userId,
-        purchased: false
-      }
-    })
-
+    const [order, created] = await Order.getCurrentOrderForUserId(userId)
+    if (!order.animals || order.animals.length === 0) {
+      return res.status(412).json({error: 'No items in cart.'})
+    }
+    order.set('purchased', true)
+    await order.save()
     res.sendStatus(204)
-    // order.set('purchased', true)
-    // await order.save()
   } catch (error) {
     next(error)
   }
