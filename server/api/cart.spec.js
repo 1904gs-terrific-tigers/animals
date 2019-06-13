@@ -7,6 +7,11 @@ const db = require('../db')
 const app = require('../index')
 const {User, Order, AnimalOrder, Animal} = require('../db/models')
 
+// we scope the agent to each test in order to not have other tests affect
+// the routes we're trying to test. The database is updated in general
+// because those are some things we're not really touching but just using
+// so we want to share them between all tests
+
 describe('Cart routes', () => {
   let dummyUser, dummyOrder, cody, lola
 
@@ -74,7 +79,7 @@ describe('Cart routes', () => {
         expect(dummyOrder.purchased).to.be.false
 
         // actually update the cart now
-        await agent.put('/api/cart').expect(200)
+        await agent.put('/api/cart').expect(204)
 
         // and now we'll check the order to make sure it's changed
         const updatedOrder = await Order.findOne({id: dummyOrder.id})
@@ -92,7 +97,9 @@ describe('Cart routes', () => {
         expect(dummyOrder.purchased).to.be.false
 
         // we expect some 400-series error because not allowed
-        await agent.put('/api/cart').expect(412)
+        const res = await agent.put('/api/cart').expect(412)
+        // we expect an error to be in the body some with some message
+        expect(res.body.error).to.exist
 
         // and now let's check to make sure it didn't do anything
         const updatedOrder = await Order.findOne({id: dummyOrder.id})
@@ -101,7 +108,49 @@ describe('Cart routes', () => {
     })
 
     describe('POST /api/cart/:animalId', () => {
-      it('should set item to given amount if the cart does not have the item in the cart currently', () => {})
+      it('should set item to given amount if the cart does not have the item in the cart currently', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        // update cart to add lola to it with quant 3
+        await agent
+          .post(`/api/cart/${lola.id}`)
+          .send({quantity: 3})
+          .expect(202)
+
+        // fetch animals in the updated order
+        const animalsInOrder = await dummyOrder.getAnimals()
+        expect(animalsInOrder).to.have.lengthOf(2)
+        // grab individual quantities
+        const quantities = animalsInOrder.map(
+          animal => animal.animalOrder.quantity
+        )
+
+        expect(quantities).to.have.all.members([10, 3])
+      })
+
+      it('should add the quantity if the cart already has the item', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        // cody should now be whatever it was + 90
+        await agent
+          .post(`/api/cart/${cody.id}`)
+          .send({quantity: 90})
+          .expect(202)
+
+        // fetch animals in the updated order
+        const animalsInOrder = await dummyOrder.getAnimals()
+        expect(animalsInOrder).to.have.lengthOf(2)
+        // grab individual quantities
+        const quantities = animalsInOrder.map(
+          animal => animal.animalOrder.quantity
+        )
+
+        expect(quantities).to.have.all.members([100])
+      })
     })
   }) // end describe('/api/cart')
 }) // end describe('Car routes')
