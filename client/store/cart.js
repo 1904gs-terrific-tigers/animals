@@ -4,7 +4,7 @@ import Axios from 'axios'
  * ACTION TYPES
  */
 const GOT_CART = 'GOT_CART'
-const SUBMIT_CART = 'SUBMIT_CART'
+const SUBMIT_ORDER = 'SUBMIT_ORDER'
 const UPDATE_QUANTITY = 'UPDATE_QUANTITY'
 
 /**
@@ -12,6 +12,7 @@ const UPDATE_QUANTITY = 'UPDATE_QUANTITY'
  */
 const gotCart = cart => ({type: GOT_CART, cart})
 const updateQt = (id, qt) => ({type: UPDATE_QUANTITY, id, qt})
+const submitOrder = () => ({type: SUBMIT_ORDER})
 
 /**
  * INITIAL STATE
@@ -45,17 +46,6 @@ export const getCart = () => {
   }
 }
 
-// export const getCart = () => {
-//     return dispatch => {
-//       try {
-//         const data = initialState
-//         dispatch(gotCart(data))
-//       } catch (err) {
-//         console.error(err)
-//       }
-//     }
-//   }
-
 export const updateCart = (id, qt) => {
   return async dispatch => {
     try {
@@ -67,15 +57,27 @@ export const updateCart = (id, qt) => {
   }
 }
 
-// export const updateCart = (id, qt) => {
-//     return dispatch => {
-//         try {
-//             dispatch(updateQt(id, qt))
-//         } catch (error) {
-//             console.error(error)
-//         }
+// export const submit = () => {
+//   return async dispatch => {
+//     try {
+//       await Axios.put('/api/cart')
+//       dispatch(submitOrder())
+//     } catch (err) {
+//       console.error(err)
 //     }
+//   }
 // }
+
+export const submit = () => {
+  return dispatch => {
+    try {
+      dispatch(submitOrder())
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
 /**
  * REDUCER
  */
@@ -88,6 +90,10 @@ export default (state = initialState, action) => {
     case UPDATE_QUANTITY:
       let idx = newState.findIndex(obj => obj.id === action.id)
       newState[idx].quantity = action.qt
+      break
+    case SUBMIT_ORDER:
+      newState = []
+      break
     default:
       break
   }
