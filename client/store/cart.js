@@ -38,7 +38,6 @@ export const getCart = () => {
   return async dispatch => {
     try {
       const {data} = await Axios.get(`/api/cart`)
-      console.log('data in thunk', data)
       dispatch(gotCart(data))
     } catch (err) {
       console.error(err)
@@ -57,20 +56,10 @@ export const updateCart = (id, qt) => {
   }
 }
 
-// export const submit = () => {
-//   return async dispatch => {
-//     try {
-//       await Axios.put('/api/cart')
-//       dispatch(submitOrder())
-//     } catch (err) {
-//       console.error(err)
-//     }
-//   }
-// }
-
 export const submit = () => {
-  return dispatch => {
+  return async dispatch => {
     try {
+      await Axios.put('/api/cart')
       dispatch(submitOrder())
     } catch (err) {
       console.error(err)
