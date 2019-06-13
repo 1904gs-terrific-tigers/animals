@@ -5,8 +5,9 @@ import thunkMiddleware from 'redux-thunk'
 import animal from './animal'
 import user from './user'
 import animals from './animals'
+import cart from './cart'
 
-const reducer = combineReducers({user, animals, animal})
+const reducer = combineReducers({user, animals, animal, cart})
 
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -18,3 +19,4 @@ export default store
 export * from './animal'
 export * from './user'
 export * from './animals'
+export * from './cart'
