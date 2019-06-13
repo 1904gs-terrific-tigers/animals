@@ -55,7 +55,6 @@ describe('Cart', () => {
   })
 
   it('renders quantity in an input tag', () => {
-    console.log('cartData qty:', cartData[0].quantity)
     expect(
       cart
         .find('input')
