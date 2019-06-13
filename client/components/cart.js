@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getCart, updateCart, submit} from '../store'
+import {getCart, updateCart, submit, remove} from '../store'
 import CartItem from './cart-item'
 
 export class Cart extends Component {
@@ -8,11 +8,15 @@ export class Cart extends Component {
     super()
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
   componentDidMount() {
     this.props.getItem()
   }
 
+  handleRemove(event) {
+    this.props.removeItem(Number(event.target.id))
+  }
   handleSubmit() {
     this.props.submitOrder()
   }
@@ -23,9 +27,11 @@ export class Cart extends Component {
     if (this.props.cart.length !== 0) {
       return (
         <div>
-          <button type="submit">Remove Item</button>
           {this.props.cart.map(item => (
             <div key={item.id}>
+              <button id={item.id} onClick={this.handleRemove} type="submit">
+                Remove Item
+              </button>
               <CartItem animal={item} />
               <input
                 id={item.id}
@@ -54,7 +60,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   getItem: () => dispatch(getCart()),
   updatingCart: (id, qt) => dispatch(updateCart(id, qt)),
-  submitOrder: () => dispatch(submit())
+  submitOrder: () => dispatch(submit()),
+  removeItem: id => dispatch(remove(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)

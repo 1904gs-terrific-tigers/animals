@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter'
 import {expect} from 'chai'
 import configureMockStore from 'redux-mock-store'
 import thunkMiddleware from 'redux-thunk'
-import {getCart, updateCart, submit} from './cart'
+import {getCart, updateCart, submit, remove} from './cart'
 
 const middlewares = [thunkMiddleware]
 const mockStore = configureMockStore(middlewares)
@@ -70,8 +70,8 @@ describe('thunk creators', () => {
       await store.dispatch(updateCart(cartData[1].id, cartData[1].quantity))
       const actions = store.getActions()
       expect(actions[0].type).to.be.equal('UPDATE_QUANTITY')
-      expect(actions[0].id).to.be.deep.equal(cartData[1].id)
-      expect(actions[0].qt).to.be.deep.equal(cartData[1].quantity)
+      expect(actions[0].id).to.be.equal(cartData[1].id)
+      expect(actions[0].qt).to.be.equal(cartData[1].quantity)
     })
   })
 
@@ -81,7 +81,18 @@ describe('thunk creators', () => {
       await store.dispatch(submit())
       const actions = store.getActions()
       expect(actions[0].type).to.be.equal('SUBMIT_ORDER')
-      expect(store.getState()).to.be.equal(initialState)
+      expect(store.getState()).to.be.deep.equal(initialState)
+    })
+  })
+
+  describe('remove thunk', () => {
+    it('dispatches REMOVE_ITEM action', async () => {
+      store = mockStore(cartData)
+      mockAxios.onDelete(`/api/cart/${cartData[0].id}`).replyOnce(204)
+      await store.dispatch(remove(cartData[0].id))
+      const actions = store.getActions()
+      expect(actions[0].type).to.be.equal('REMOVE_ITEM')
+      expect(actions[0].id).to.be.equal(cartData[0].id)
     })
   })
 })
