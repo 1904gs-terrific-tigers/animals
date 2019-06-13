@@ -13,17 +13,29 @@ const {User, Order, AnimalOrder, Animal} = require('../db/models')
 // so we want to share them between all tests
 
 describe('Cart routes', () => {
-  let dummyUser, dummyOrder, cody, lola
+  // will have dummy order associated with them
+  let dummyUser, dummyOrder
+
+  // animals
+  let cody, lola
 
   let userSignIn = {
     email: 'cody@puppybook.com',
     password: '123'
   }
 
+  // does not have order associated with them
+  let anotherUser
+  const anotherUserSignIn = {
+    email: 'cody@doggybook.com',
+    password: '124'
+  }
+
   beforeEach(async () => {
     await db.sync({force: true})
 
     dummyUser = await User.create(userSignIn)
+    anotherUser = await User.create(anotherUserSignIn)
 
     dummyOrder = await dummyUser.createOrder({
       purchased: false
@@ -65,6 +77,17 @@ describe('Cart routes', () => {
         expect(res.body[0].timeUnit).to.equal(cody.timeUnit)
         expect(res.body[0].price).to.equal(cody.price)
         expect(res.body[0].quantity).to.equal(10)
+      })
+
+      it('returns an empty array if no cart exists', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(anotherUserSignIn)
+        // get the actual cart
+        const res = await agent.get('/api/cart').expect(200)
+
+        expect(res.body).to.be.an('array')
+        expect(res.body).to.have.lengthOf(0)
       })
 
       it('gets the correct users cart', async () => {
@@ -181,6 +204,22 @@ describe('Cart routes', () => {
 
         expect(quantities).to.have.all.members([100])
       })
+      it('should create a cart if needed before adding', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(anotherUserSignIn)
+
+        // note that the cart is not created yet but we want to put something in
+        await agent
+          .put(`/api/cart/${lola.id}`)
+          .send({quantity: 3})
+          .expect(204)
+        // shoud really be using the db model to pull up the order details but w/e
+        const res = await agent.get('/api/cart').expect(200)
+
+        expect(res.body).to.be.an('array')
+        expect(res.body).to.have.lengthOf(1)
+      })
       // TODO add test for if animal does not exist in db
     })
 
@@ -226,6 +265,23 @@ describe('Cart routes', () => {
         )
 
         expect(quantities).to.have.all.members([3])
+      })
+
+      it('should create a cart if needed before adding', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(anotherUserSignIn)
+
+        // note that the cart is not created yet but we want to put something in
+        await agent
+          .post(`/api/cart/${lola.id}`)
+          .send({quantity: 3})
+          .expect(204)
+        // shoud really be using the db model to pull up the order details but w/e
+        const res = await agent.get('/api/cart').expect(200)
+
+        expect(res.body).to.be.an('array')
+        expect(res.body).to.have.lengthOf(1)
       })
     })
     describe('DELETE /api/cart/:animalId', () => {
