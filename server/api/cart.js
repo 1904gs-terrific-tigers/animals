@@ -30,7 +30,15 @@ router.get('/', async (req, res, next) => {
       },
       include: [Animal]
     })
-    res.json(cart.animals)
+    const data = cart.animals.map(animal => ({
+      id: animal.id,
+      name: animal.name,
+      imageUrl: animal.imageUrl,
+      timeUnit: animal.timeUnit,
+      price: animal.price,
+      quantity: animal.animalOrder.quantity
+    }))
+    res.json(data)
   } catch (error) {
     next(error)
   }
