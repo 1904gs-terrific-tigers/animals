@@ -19,7 +19,6 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route exact path="/animals" component={AllAnimals} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
 
@@ -27,9 +26,11 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route path="/" exact component={AllAnimals} />
+            <Route path="/animals" exact component={AllAnimals} />
+            <Route path="/animals/:animalId" component={SingleAnimal} />
           </Switch>
         )}
-        <Route path="/animals/:animalId" component={SingleAnimal} />
         {/* Displays our Login component as a fallback */}
         <Route component={Login} />
       </Switch>
