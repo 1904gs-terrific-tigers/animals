@@ -170,7 +170,7 @@ describe('Cart routes', () => {
         await agent
           .post(`/api/cart/${lola.id}`)
           .send({quantity: 3})
-          .expect(202)
+          .expect(204)
 
         // fetch animals in the updated order
         const animalsInOrder = await dummyOrder.getAnimals()
@@ -192,7 +192,7 @@ describe('Cart routes', () => {
         await agent
           .post(`/api/cart/${cody.id}`)
           .send({quantity: 90})
-          .expect(202)
+          .expect(204)
 
         // fetch animals in the updated order
         const animalsInOrder = await dummyOrder.getAnimals()
@@ -211,14 +211,16 @@ describe('Cart routes', () => {
 
         // note that the cart is not created yet but we want to put something in
         await agent
-          .put(`/api/cart/${lola.id}`)
+          .post(`/api/cart/${lola.id}`)
           .send({quantity: 3})
           .expect(204)
-        // shoud really be using the db model to pull up the order details but w/e
-        const res = await agent.get('/api/cart').expect(200)
 
-        expect(res.body).to.be.an('array')
-        expect(res.body).to.have.lengthOf(1)
+        const [cart, created] = await Order.getCurrentOrderForUserId(
+          anotherUser.id
+        )
+        const animals = await cart.getAnimals()
+        expect(animals).to.be.an('array')
+        expect(animals).to.have.lengthOf(1)
       })
       // TODO add test for if animal does not exist in db
     })
@@ -274,14 +276,16 @@ describe('Cart routes', () => {
 
         // note that the cart is not created yet but we want to put something in
         await agent
-          .post(`/api/cart/${lola.id}`)
+          .put(`/api/cart/${lola.id}`)
           .send({quantity: 3})
           .expect(204)
-        // shoud really be using the db model to pull up the order details but w/e
-        const res = await agent.get('/api/cart').expect(200)
 
-        expect(res.body).to.be.an('array')
-        expect(res.body).to.have.lengthOf(1)
+        const [cart, created] = await Order.getCurrentOrderForUserId(
+          anotherUser.id
+        )
+        const animals = await cart.getAnimals()
+        expect(animals).to.be.an('array')
+        expect(animals).to.have.lengthOf(1)
       })
     })
     describe('DELETE /api/cart/:animalId', () => {

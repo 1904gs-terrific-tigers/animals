@@ -23,19 +23,18 @@ router.use(isLoggedIn)
 router.get('/', async (req, res, next) => {
   try {
     //get cart from database
-    let cart = await Order.findCurrentOrderForUserId(req.user.id)
-    if (!cart) {
-      // if user has no cart, they have an empty cart
-      return res.json([])
-    }
-    const data = cart.animals.map(animal => ({
-      id: animal.id,
-      name: animal.name,
-      imageUrl: animal.imageUrl,
-      timeUnit: animal.timeUnit,
-      price: animal.price,
-      quantity: animal.animalOrder.quantity
-    }))
+    let [cart, created] = await Order.getCurrentOrderForUserId(req.user.id)
+
+    const data = cart.animals
+      ? cart.animals.map(animal => ({
+          id: animal.id,
+          name: animal.name,
+          imageUrl: animal.imageUrl,
+          timeUnit: animal.timeUnit,
+          price: animal.price,
+          quantity: animal.animalOrder.quantity
+        }))
+      : []
     res.json(data)
   } catch (error) {
     next(error)
@@ -45,55 +44,21 @@ router.get('/', async (req, res, next) => {
 // adds item to cart
 router.post('/:animalId', async (req, res, next) => {
   try {
-    const userId = req.user.id
     // gives us an order with only 1 animal
     // and the attached animalOrder with the correct quantity
-    const order = await Order.findOne({
-      where: {
-        userId,
-        purchased: false
-      },
-      include: [
-        {
-          model: Animal,
-          through: {
-            where: {
-              animalId: +req.params.animalId
-            }
-          }
-        }
-      ]
-    })
-    // this means animal does not exist in cart OR the database
-    // we need to find out which one
-    if (order.animals.length === 0) {
-      // TODO fix this
-      // assume we have an animal tho for now
-      // const screw_the_linter = 1;
-      // if (1 !== screw_the_linter) {
-      //   return res.json({
-      //     error: 'Animal does not seem to exist in our records.'
-      //   })
-      // }
-      const animal = await Animal.findByPk(+req.params.animalId)
-      order.addAnimal(animal, {
-        through: {
-          quantity: req.body.quantity,
-          price: animal.price
-        }
-      })
-    } else {
-      // else, already in our cart and exists. just add more
-      const animalOrder = order.animals[0].animalOrder
-      const oldQuantity = animalOrder.quantity
-      const incomingQuantity = req.body.quantity
-      animalOrder.set('quantity', oldQuantity + incomingQuantity)
-      await animalOrder.save()
-    }
+    const [cart, created] = await Order.getCurrentOrderForUserId(req.user.id)
+    console.log('created cart:', created)
+    await cart.addAnimalQuantity(+req.params.animalId, req.body.quantity)
 
-    res.sendStatus(202)
+    res.sendStatus(204)
   } catch (error) {
-    next(error)
+    switch (error) {
+      case Order.AnimalDoesNotExistError:
+        res.json({error: Order.AnimalDoesNotExistError})
+        break
+      default:
+        next(error)
+    }
   }
 })
 
@@ -107,6 +72,7 @@ router.put('/', async (req, res, next) => {
         purchased: false
       }
     })
+
     res.sendStatus(204)
     // order.set('purchased', true)
     // await order.save()
@@ -115,7 +81,7 @@ router.put('/', async (req, res, next) => {
   }
 })
 
-// // removes item from cart
+// removes item from cart
 // router.delete('/', async (req, res, next) => {
 //   try {
 //   } catch (error) {}
