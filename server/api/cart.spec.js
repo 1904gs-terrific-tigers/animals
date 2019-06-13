@@ -152,5 +152,50 @@ describe('Cart routes', () => {
         expect(quantities).to.have.all.members([100])
       })
     })
+
+    describe('PUT /api/cart/:animalId', () => {
+      it('should set item to given amount if the cart does not have the item in the cart currently', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        // update cart to set lola to quant 3
+        await agent
+          .put(`/api/cart/${lola.id}`)
+          .send({quantity: 3})
+          .expect(204)
+
+        // fetch animals in the updated order
+        const animalsInOrder = await dummyOrder.getAnimals()
+        expect(animalsInOrder).to.have.lengthOf(2)
+        // grab individual quantities
+        const quantities = animalsInOrder.map(
+          animal => animal.animalOrder.quantity
+        )
+
+        expect(quantities).to.have.all.members([10, 3])
+      })
+      it('should set item to given amount if cart already has the item in cart', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        // update cart to set cody to quant 3
+        await agent
+          .put(`/api/cart/${cody.id}`)
+          .send({quantity: 3})
+          .expect(204)
+
+        // fetch animals in the updated order
+        const animalsInOrder = await dummyOrder.getAnimals()
+        expect(animalsInOrder).to.have.lengthOf(2)
+        // grab individual quantities
+        const quantities = animalsInOrder.map(
+          animal => animal.animalOrder.quantity
+        )
+
+        expect(quantities).to.have.all.members([3])
+      })
+    })
   }) // end describe('/api/cart')
 }) // end describe('Car routes')
