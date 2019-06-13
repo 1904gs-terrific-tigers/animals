@@ -99,11 +99,23 @@ router.post('/:animalId', async (req, res, next) => {
   }
 })
 
-// // changes order to purchased
-// router.put('/', async (req, res, next) => {
-//   try {
-//   } catch (error) {}
-// })
+// changes order to purchased
+router.put('/', async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    const order = await Order.findOne({
+      where: {
+        userId,
+        purchased: false
+      }
+    })
+    res.sendStatus(204)
+    // order.set('purchased', true)
+    // await order.save()
+  } catch (error) {
+    next(error)
+  }
+})
 
 // // removes item from cart
 // router.delete('/', async (req, res, next) => {
