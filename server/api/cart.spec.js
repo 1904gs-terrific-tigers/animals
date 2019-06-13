@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* global describe beforeEach it */
 
 const {expect} = require('chai')
@@ -55,6 +56,25 @@ describe('Cart routes', () => {
       expect(res.body[0].timeUnit).to.equal(dummyAnimal.timeUnit)
       expect(res.body[0].price).to.equal(dummyAnimal.price)
       expect(res.body[0].quantity).to.equal(10)
+    })
+
+    it('PUT /api/cart/', async () => {
+      // should check to see if cart exists.
+      // if it exists and is not empty (no items inside cart), set bought to true. do nothing otherwise.
+      const agent = request.agent(app)
+
+      await agent.post('/auth/login').send({
+        email: 'cody@puppybook.com',
+        password: '123'
+      })
+
+      expect(dummyOrder.purchased).to.be.false
+
+      await agent.put('/api/cart').expect(200)
+
+      const updatedOrder = await Order.findOne({id: dummyOrder.id})
+
+      expect(updatedOrder.purchased).to.be.true
     })
   }) // end describe('/api/cart')
 }) // end describe('Car routes')
