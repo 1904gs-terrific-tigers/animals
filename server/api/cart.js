@@ -23,13 +23,11 @@ router.use(isLoggedIn)
 router.get('/', async (req, res, next) => {
   try {
     //get cart from database
-    let cart = await Order.findOne({
-      where: {
-        userId: req.user.id,
-        purchased: false
-      },
-      include: [Animal]
-    })
+    let cart = await Order.findCurrentOrderForUserId(req.user.id)
+    if (!cart) {
+      // if user has no cart, they have an empty cart
+      return res.json([])
+    }
     const data = cart.animals.map(animal => ({
       id: animal.id,
       name: animal.name,

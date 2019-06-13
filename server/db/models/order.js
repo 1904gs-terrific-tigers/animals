@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
+const Animal = require('./animal')
 
 const Order = db.define('order', {
   purchased: {
@@ -7,5 +8,15 @@ const Order = db.define('order', {
     defaultValue: false
   }
 })
+
+Order.findCurrentOrderForUserId = id => {
+  return Order.findOne({
+    where: {
+      userId: id,
+      purchased: false
+    },
+    include: [Animal]
+  })
+}
 
 module.exports = Order
