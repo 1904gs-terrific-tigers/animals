@@ -173,7 +173,7 @@ describe('Cart routes', () => {
 
         // fetch animals in the updated order
         const animalsInOrder = await dummyOrder.getAnimals()
-        expect(animalsInOrder).to.have.lengthOf(2)
+        expect(animalsInOrder).to.have.lengthOf(1)
         // grab individual quantities
         const quantities = animalsInOrder.map(
           animal => animal.animalOrder.quantity
@@ -181,6 +181,7 @@ describe('Cart routes', () => {
 
         expect(quantities).to.have.all.members([100])
       })
+      // TODO add test for if animal does not exist in db
     })
 
     describe('PUT /api/cart/:animalId', () => {

@@ -44,14 +44,63 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// adds item to cart
+router.post('/:animalId', async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    // gives us an order with only 1 animal
+    // and the attached animalOrder with the correct quantity
+    const order = await Order.findOne({
+      where: {
+        userId,
+        purchased: false
+      },
+      include: [
+        {
+          model: Animal,
+          through: {
+            where: {
+              animalId: +req.params.animalId
+            }
+          }
+        }
+      ]
+    })
+    // this means animal does not exist in cart OR the database
+    // we need to find out which one
+    if (order.animals.length === 0) {
+      // TODO fix this
+      // assume we have an animal tho for now
+      // const screw_the_linter = 1;
+      // if (1 !== screw_the_linter) {
+      //   return res.json({
+      //     error: 'Animal does not seem to exist in our records.'
+      //   })
+      // }
+      const animal = await Animal.findByPk(+req.params.animalId)
+      order.addAnimal(animal, {
+        through: {
+          quantity: req.body.quantity,
+          price: animal.price
+        }
+      })
+    } else {
+      // else, already in our cart and exists. just add more
+      const animalOrder = order.animals[0].animalOrder
+      const oldQuantity = animalOrder.quantity
+      const incomingQuantity = req.body.quantity
+      animalOrder.set('quantity', oldQuantity + incomingQuantity)
+      await animalOrder.save()
+    }
+
+    res.sendStatus(202)
+  } catch (error) {
+    next(error)
+  }
+})
+
 // // changes order to purchased
 // router.put('/', async (req, res, next) => {
-//   try {
-//   } catch (error) {}
-// })
-
-// // adds item to cart
-// router.post('/:animalid', async (req, res, next) => {
 //   try {
 //   } catch (error) {}
 // })
