@@ -54,6 +54,43 @@ Order.prototype.addAnimalQuantity = async function(animalId, quantity) {
   return true
 }
 
-Order.prototype.setAnimalQuantity = (animalId, quantity) => {}
+Order.prototype.setAnimalQuantity = async function(animalId, quantity) {
+  const animal = await Animal.findByPk(animalId)
+  if (!animal) {
+    throw AnimalDoesNotExistError
+  }
+  const [cartItem, created] = await AnimalOrder.findOrCreate({
+    where: {
+      animalId: animal.id,
+      orderId: this.id
+    },
+    defaults: {
+      animalId: animal.id,
+      orderId: this.id,
+      price: animal.price,
+      quantity: quantity
+    }
+  })
+  //only change quantity if order already exists
+  if (!created) {
+    await cartItem.update({
+      quantity: quantity
+    })
+  }
+  return true
+}
+
+Order.prototype.deleteAnimalOrder = async function(animalId) {
+  const animal = await Animal.findByPk(animalId)
+  if (!animal) {
+    throw AnimalDoesNotExistError
+  }
+  await AnimalOrder.destroy({
+    where: {
+      animalId: animal.id,
+      orderId: this.id
+    }
+  })
+}
 
 module.exports = Order

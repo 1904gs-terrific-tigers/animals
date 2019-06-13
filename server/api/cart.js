@@ -47,7 +47,6 @@ router.post('/:animalId', async (req, res, next) => {
     // gives us an order with only 1 animal
     // and the attached animalOrder with the correct quantity
     const [cart, created] = await Order.getCurrentOrderForUserId(req.user.id)
-    console.log('created cart:', created)
     await cart.addAnimalQuantity(+req.params.animalId, req.body.quantity)
 
     res.sendStatus(204)
@@ -78,8 +77,26 @@ router.put('/', async (req, res, next) => {
   }
 })
 
+//changes quantity in cart for given item
+router.put('/:animalId', async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    const [order, created] = await Order.getCurrentOrderForUserId(userId)
+    await order.setAnimalQuantity(req.params.animalId, req.body.quantity)
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
+
 // removes item from cart
-// router.delete('/', async (req, res, next) => {
-//   try {
-//   } catch (error) {}
-// })
+router.delete('/:animalId', async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    const [order, created] = await Order.getCurrentOrderForUserId(userId)
+    await order.deleteAnimalOrder(req.params.animalId)
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})

@@ -260,7 +260,7 @@ describe('Cart routes', () => {
 
         // fetch animals in the updated order
         const animalsInOrder = await dummyOrder.getAnimals()
-        expect(animalsInOrder).to.have.lengthOf(2)
+        expect(animalsInOrder).to.have.lengthOf(1)
         // grab individual quantities
         const quantities = animalsInOrder.map(
           animal => animal.animalOrder.quantity
