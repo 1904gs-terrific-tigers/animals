@@ -197,5 +197,31 @@ describe('Cart routes', () => {
         expect(quantities).to.have.all.members([3])
       })
     })
+    describe('DELETE /api/cart/:animalId', () => {
+      it('should delete an existing item from a cart', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        // delete cody from cart
+        await agent.delete(`/api/cart/${cody.id}`).expect(204)
+
+        // fetch animals in the updated order
+        const animalsInOrder = await dummyOrder.getAnimals()
+        expect(animalsInOrder).to.have.lengthOf(0)
+      })
+      it('should do nothing if the item is not in the cart', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+        // delete lola from cart (she's not in it)
+        await agent.delete(`/api/cart/${lola.id}`).expect(204)
+
+        // fetch animals in the updated order
+        const animalsInOrder = await dummyOrder.getAnimals()
+        expect(animalsInOrder).to.have.lengthOf(1)
+        expect(animalsInOrder[0].name).to.equal(cody.name)
+      })
+    })
   }) // end describe('/api/cart')
 }) // end describe('Car routes')
