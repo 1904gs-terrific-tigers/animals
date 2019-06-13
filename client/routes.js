@@ -2,7 +2,14 @@ import PropTypes from 'prop-types'
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Route, Switch, withRouter} from 'react-router-dom'
-import {AllAnimals, Login, Signup, SingleAnimal, UserHome} from './components'
+import {
+  AllAnimals,
+  Login,
+  Signup,
+  SingleAnimal,
+  UserHome,
+  Cart
+} from './components'
 import {me} from './store'
 
 /**
@@ -29,6 +36,7 @@ class Routes extends Component {
             <Route path="/" exact component={AllAnimals} />
             <Route path="/animals" exact component={AllAnimals} />
             <Route path="/animals/:animalId" component={SingleAnimal} />
+            <Route path="/cart" component={Cart} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
