@@ -50,20 +50,50 @@ describe('Cart routes', () => {
         }
       })
     })
+    describe('GET /api/cart', () => {
+      it('gets a users cart', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+        // get the actual cart
+        const res = await agent.get('/api/cart').expect(200)
+        // check EVERYTHING
+        expect(res.body).to.be.an('array')
+        expect(res.body[0].id).to.equal(cody.id) //first elem in array is animal obj
+        expect(res.body[0].name).to.equal(cody.name)
+        expect(res.body[0].imageUrl).to.equal(cody.imageUrl)
+        expect(res.body[0].timeUnit).to.equal(cody.timeUnit)
+        expect(res.body[0].price).to.equal(cody.price)
+        expect(res.body[0].quantity).to.equal(10)
+      })
 
-    it('GET /api/cart', async () => {
-      const agent = request.agent(app)
+      it('gets the correct users cart', async () => {
+        const secondUserLogin = {email: 'a@a.', password: '124'}
+        const secondUser = await User.create(secondUserLogin)
+        const secondUserOrder = await secondUser.createOrder({
+          purchased: false
+        })
+        await secondUserOrder.addAnimal(lola, {
+          through: {
+            quantity: 2,
+            price: lola.price
+          }
+        })
 
-      await agent.post('/auth/login').send(userSignIn)
-
-      const res = await agent.get('/api/cart').expect(200)
-      expect(res.body).to.be.an('array')
-      expect(res.body[0].id).to.equal(cody.id) //first elem in array is animal obj
-      expect(res.body[0].name).to.equal(cody.name)
-      expect(res.body[0].imageUrl).to.equal(cody.imageUrl)
-      expect(res.body[0].timeUnit).to.equal(cody.timeUnit)
-      expect(res.body[0].price).to.equal(cody.price)
-      expect(res.body[0].quantity).to.equal(10)
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(secondUserLogin)
+        // get the actual cart
+        const res = await agent.get('/api/cart').expect(200)
+        // check EVERYTHING
+        expect(res.body).to.be.an('array')
+        expect(res.body[0].id).to.equal(lola.id) //first elem in array is animal obj
+        expect(res.body[0].name).to.equal(lola.name)
+        expect(res.body[0].imageUrl).to.equal(lola.imageUrl)
+        expect(res.body[0].timeUnit).to.equal(lola.timeUnit)
+        expect(res.body[0].price).to.equal(lola.price)
+        expect(res.body[0].quantity).to.equal(2)
+      })
     })
 
     describe('PUT /api/cart/', () => {
