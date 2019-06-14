@@ -16,7 +16,7 @@ const gotCart = cart => ({type: GOT_CART, cart})
 const updateQt = (id, qt) => ({type: UPDATE_QUANTITY, id, qt})
 const submitOrder = () => ({type: SUBMIT_ORDER})
 const removeItem = id => ({type: REMOVE_ITEM, id})
-const addedItem = id => ({type: ADDED_ITEM, animal, qt})
+const addedItem = (animal, qt) => ({type: ADDED_ITEM, animal, qt})
 
 /**
  * INITIAL STATE
