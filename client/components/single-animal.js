@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
-import {getAnimal} from '../store'
+import {getAnimal, addItem} from '../store'
 
 //component
 
@@ -9,6 +9,16 @@ export const SingleAnimal = props => {
   useEffect(() => {
     props.getAnimal(props.match.params.animalId)
   }, [])
+
+  const animal = {
+    id: props.id,
+    name: props.name,
+    imageUrl: props.imageUrl,
+    price: props.price
+  }
+
+  const [quantity, setQuantity] = useState(1)
+
   return (
     <div>
       <h1>{props.name}</h1>
@@ -27,10 +37,18 @@ export const SingleAnimal = props => {
           <label htmlFor="quantity">Quantity:</label>
         </span>
         <span>
-          <input id="quantity" name="quantity" defaultValue="1" type="number" />
+          <input
+            id="quantity"
+            name="quantity"
+            onChange={event => setQuantity(event.target.value)}
+            value={quantity}
+            type="number"
+          />
         </span>
       </div>
-      <button type="submit">Add to Cart</button>
+      <button type="submit" onClick={() => props.addToCart(animal, quantity)}>
+        Add to Cart
+      </button>
     </div>
   )
 }
@@ -40,7 +58,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getAnimal: id => dispatch(getAnimal(id))
+  getAnimal: id => dispatch(getAnimal(id)),
+  addToCart: (animal, qt) => dispatch(addItem(animal, qt))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleAnimal)
