@@ -7,6 +7,7 @@ const GOT_CART = 'GOT_CART'
 const SUBMIT_ORDER = 'SUBMIT_ORDER'
 const UPDATE_QUANTITY = 'UPDATE_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
+const ADDED_ITEM = 'ADDED_ITEM'
 
 /**
  * ACTION CREATORS
@@ -15,6 +16,7 @@ const gotCart = cart => ({type: GOT_CART, cart})
 const updateQt = (id, qt) => ({type: UPDATE_QUANTITY, id, qt})
 const submitOrder = () => ({type: SUBMIT_ORDER})
 const removeItem = id => ({type: REMOVE_ITEM, id})
+const addedItem = id => ({type: ADDED_ITEM, animal, qt})
 
 /**
  * INITIAL STATE
@@ -88,6 +90,17 @@ export const remove = id => {
   }
 }
 
+export const addItem = (animal, qt) => {
+  return async dispatch => {
+    try {
+      await Axios.post(`/api/cart/${animal.id}`, {quantity: qt})
+      dispatch(addedItem(animal, qt))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
 /**
  * REDUCER
  */
@@ -108,6 +121,11 @@ export default (state = initialState, action) => {
     case REMOVE_ITEM:
       idx = newState.findIndex(obj => obj.id === action.id)
       newState.splice(idx, 1)
+      break
+    case ADDED_ITEM:
+      let item = action.animal
+      item.quantity = action.qt
+      newState.push(item)
       break
     default:
       break
