@@ -1,0 +1,17 @@
+
+#!/bin/bash
+
+file='server/dumb.spec.js'
+echo "const {expect} = require('chai')" > $file
+
+echo "describe ('9000 tests', () => {" >> $file
+test=1
+while [ $test -le 9000 ]
+do
+    echo "    it('makes sure that $test === $test', () => {" >> $file
+    echo "        expect($test).to.equal($test)" >> $file
+    echo "    })" >> $file
+    ((test++))
+done
+
+echo "})" >> $file
