@@ -2,14 +2,25 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {gettingAnimals} from '../store/animals'
+import {addItem} from '../store/cart'
 
 export class AllAnimals extends React.Component {
+  constructor() {
+    super()
+    this.handleAddToCart = this.handleAddToCart.bind(this)
+  }
+
   componentDidMount() {
     //thunk to import the list
     this.props.getAnimals()
   }
 
-  //handleDelete()
+  handleAddToCart(event, animal) {
+    // this is a really hacky way to do this but it works for now.
+    // if the structure below is changed, this will probably not work anymore
+    const qt = event.target.previousSibling.value
+    this.props.addAnimalTocart(animal, qt)
+  }
 
   render() {
     return (
@@ -25,7 +36,15 @@ export class AllAnimals extends React.Component {
                 <img src={animal.imageUrl} />
               </Link>
               <h3>Price: {animal.price}</h3>
-              <button type="submit">Add to Cart</button>
+              <input type="number" />
+              <button
+                type="submit"
+                onClick={event => {
+                  this.handleAddToCart(event, animal)
+                }}
+              >
+                Add to Cart
+              </button>
             </div>
           )
         })}
@@ -39,7 +58,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getAnimals: () => dispatch(gettingAnimals())
+  getAnimals: () => dispatch(gettingAnimals()),
+  addAnimalTocart: (animal, qt) => dispatch(addItem(animal, qt))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllAnimals)

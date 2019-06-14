@@ -11,23 +11,56 @@ async function seed() {
     User.create({email: 'cody@email.com', password: '123'}),
     User.create({email: 'murphy@email.com', password: '123'})
   ])
-
+  const cody = users[0]
   const animals = await Promise.all([
     Animal.create({
-      id: 1,
-      name: 'Cody',
+      name: 'Hang with Sid',
       imageUrl:
         'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
       species: 'sloth',
       price: 1
     }),
     Animal.create({
-      id: 2,
-      name: 'Simba',
+      name: 'Cuddle with Simba',
       imageUrl:
         'https://media.cntraveler.com/photos/53ec0c68976f8f2d44d5ab1e/master/w_420,c_limit/tiger-cubs.jpg',
       species: 'tiger',
       price: 2
+    }),
+    Animal.create({
+      name: 'Headpat Lola',
+      imageUrl:
+        'https://media.discordapp.net/attachments/123623920879271937/588868872787067074/20190221_192651-1.jpg?width=276&height=411',
+      species: 'cat',
+      price: 100
+    })
+  ])
+  const sid = animals[0],
+    simba = animals[1],
+    lola = animals[2]
+
+  const codyOrder = await cody.createOrder({
+    purchased: false
+  })
+
+  await Promise.all([
+    codyOrder.addAnimal(lola, {
+      through: {
+        quantity: 3,
+        price: lola.price
+      }
+    }),
+    codyOrder.addAnimal(sid, {
+      through: {
+        quantity: 1,
+        price: sid.price
+      }
+    }),
+    codyOrder.addAnimal(simba, {
+      through: {
+        quantity: 1,
+        price: simba.price
+      }
     })
   ])
 
