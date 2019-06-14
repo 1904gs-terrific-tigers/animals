@@ -44,8 +44,9 @@ export class Cart extends Component {
           ))}
           <div className="total">
             <p>
-              Subtotal: ${this.props.cart.map(
-                item => item.quantity * item.price
+              Subtotal: ${this.props.cart.reduce(
+                (acc, item) => acc + item.quantity * item.price,
+                0
               )}
             </p>
           </div>
