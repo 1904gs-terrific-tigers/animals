@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getCart, updateCart, submit, remove} from '../store'
+import {getCart, remove, submit, updateCart} from '../store'
 import CartItem from './cart-item'
 
 export class Cart extends Component {
@@ -42,6 +42,13 @@ export class Cart extends Component {
               />
             </div>
           ))}
+          <div className="total">
+            <p>
+              Subtotal: ${this.props.cart.map(
+                item => item.quantity * item.price
+              )}
+            </p>
+          </div>
           <button type="submit" onClick={this.handleSubmit}>
             Submit order
           </button>
