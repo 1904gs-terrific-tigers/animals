@@ -21,7 +21,7 @@
     "start": "node server",
     "start-dev": "NODE_ENV='development' npm run build-client-watch & NODE_ENV='development' npm run start-server",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
-    "test": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register"
+    "test": "NODE_ENV='test' nyc --reporter=text mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register"
   },
   "husky": {
     "hooks": {
@@ -94,6 +94,7 @@
     "mocha": "^6.1.4",
     "nodemon": "^1.18.3",
     "npm-merge-driver": "^2.3.5",
+    "nyc": "^14.1.1",
     "prettier": "1.11.1",
     "react-test-renderer": "^16.4.2",
     "redux-devtools-extension": "^2.13.5",
