@@ -93,7 +93,6 @@ export const remove = id => {
 export const addItem = (animal, qt) => {
   return async dispatch => {
     try {
-      console.log(animal, qt)
       await Axios.post(`/api/cart/${animal.id}`, {quantity: qt})
       dispatch(addedItem(animal, qt))
     } catch (err) {
