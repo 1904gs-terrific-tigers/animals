@@ -161,6 +161,19 @@ describe('Cart routes', () => {
     })
 
     describe('POST /api/cart/:animalId', () => {
+      it('should error if animalId is not a valid variable', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        const res = await agent
+          .post(`/api/cart/a`)
+          .send({quantity: 3})
+          .expect(400)
+
+        expect(res.body.error).to.exist
+      })
+
       it('should set item to given amount if the cart does not have the item in the cart currently', async () => {
         // regular auth to make sure person is authorized
         const agent = request.agent(app)
@@ -222,10 +235,22 @@ describe('Cart routes', () => {
         expect(animals).to.be.an('array')
         expect(animals).to.have.lengthOf(1)
       })
-      // TODO add test for if animal does not exist in db
     })
 
     describe('PUT /api/cart/:animalId', () => {
+      it('should error if animalId is not a valid variable', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        const res = await agent
+          .put(`/api/cart/a`)
+          .send({quantity: 3})
+          .expect(400)
+
+        expect(res.body.error).to.exist
+      })
+
       it('should set item to given amount if the cart does not have the item in the cart currently', async () => {
         // regular auth to make sure person is authorized
         const agent = request.agent(app)
