@@ -41,3 +41,29 @@ router.get('/', async (req, res, next) => {
     next(error)
   }
 })
+
+router.get('/:orderId', async (req, res, next) => {
+  try {
+    const userId = req.user.id,
+      orderId = req.params.orderId
+    const order = await Order.getUserOrder(userId, orderId)
+    if (!order) {
+      return res.status(404).json({
+        error: Order.OrderDoesNotExistError
+      })
+    }
+    res.json({
+      boughtOn: order.updatedAt,
+      animals: order.animals.map(animal => ({
+        id: animal.id,
+        name: animal.name,
+        imageUrl: animal.imageUrl,
+        timeUnit: animal.timeUnit,
+        price: animal.price,
+        quantity: animal.animalOrder.quantity
+      }))
+    })
+  } catch (error) {
+    next(error)
+  }
+})

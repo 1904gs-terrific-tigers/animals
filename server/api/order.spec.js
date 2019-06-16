@@ -12,7 +12,7 @@ const {User, Order, AnimalOrder, Animal} = require('../db/models')
 // because those are some things we're not really touching but just using
 // so we want to share them between all tests
 
-describe('Cart routes', () => {
+describe('Order routes', () => {
   // will have dummy order associated with them
   let dummyUser, dummyOrder
 
@@ -30,6 +30,8 @@ describe('Cart routes', () => {
     email: 'cody@doggybook.com',
     password: '124'
   }
+
+  let order1, order2, order3
 
   beforeEach(async () => {
     await db.sync({force: true})
@@ -51,6 +53,15 @@ describe('Cart routes', () => {
       species: 'cat',
       price: 1000
     })
+
+    order1 = await anotherUser.createOrder({purchased: true})
+    await order1.addAnimalQuantity(lola.id, 100)
+    await order1.addAnimalQuantity(cody.id, 100)
+
+    order2 = await anotherUser.createOrder({purchased: true})
+    await order2.addAnimalQuantity(lola.id, 1)
+
+    order3 = await anotherUser.createOrder({purchased: false})
   })
 
   describe('GET /api/orders/', () => {
@@ -69,13 +80,6 @@ describe('Cart routes', () => {
       // regular auth to make sure person is authorized
       const agent = request.agent(app)
       await agent.post('/auth/login').send(anotherUserSignIn)
-
-      const order1 = await anotherUser.createOrder({purchased: true})
-      await order1.addAnimalQuantity(lola.id, 100)
-      await order1.addAnimalQuantity(cody.id, 100)
-
-      const order2 = await anotherUser.createOrder({purchased: true})
-      await order2.addAnimalQuantity(lola.id, 1)
 
       const res = await agent.get('/api/orders').expect(200)
 
@@ -97,6 +101,36 @@ describe('Cart routes', () => {
       ])
 
       expect(secondOrder).to.have.deep.members([{name: 'Lola', quantity: 1}])
+    })
+
+    describe('GET /orders/:orderId', () => {
+      it('should error if the order does not exist', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        const res = await agent.get(`/api/orders/${1000}`).expect(404)
+        expect(res.body.error).to.exist
+      })
+
+      it('should error if the order belongs to another user', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        const res = await agent.get(`/api/orders/${order1.id}`).expect(404)
+        expect(res.body.error).to.exist
+      })
+
+      it('should return the order if it exists', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(anotherUserSignIn)
+
+        const res = await agent.get(`/api/orders/${order2.id}`).expect(200)
+        expect(res.body.boughtOn).to.exist
+        expect(res.body.animals).to.have.lengthOf(1)
+      })
     })
   })
 })
