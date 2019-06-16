@@ -14,6 +14,7 @@ Order.OrderDoesNotExistError = 'Order does not exist.'
 
 Order.prototype.toJSON = function() {
   return {
+    id: this.id,
     boughtOn: this.updatedAt,
     animals: this.animals.map(animal => ({
       id: animal.id,

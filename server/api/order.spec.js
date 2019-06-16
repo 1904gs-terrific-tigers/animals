@@ -89,6 +89,8 @@ describe('Order routes', () => {
       // not sure if it's always sorted, so let's sort
       res.body.sort((a, b) => a.boughtOn < b.boughtOn)
 
+      expect(res.body.map(o => o.id)).to.have.members([order1.id, order2.id])
+
       const [firstOrder, secondOrder] = res.body.map(order =>
         order.animals.map(animal => ({
           name: animal.name,
