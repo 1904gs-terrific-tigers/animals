@@ -9,7 +9,8 @@ const Order = db.define('order', {
     defaultValue: false
   }
 })
-Order.AnimalDoesNotExistError = new Error('Animal does not exist.')
+Order.AnimalDoesNotExistError = 'Animal does not exist.'
+Order.OrderDoesNotExistError = 'Order does not exist.'
 
 // returns an array of [order, newlyCreated]
 // this will create an order for the user if one does not exist
@@ -32,6 +33,17 @@ Order.getOrderHistoryForUserId = userId => {
     where: {
       userId,
       purchased: true
+    },
+    include: [Animal]
+  })
+}
+
+Order.getUserOrder = (userId, orderId) => {
+  return Order.findOne({
+    where: {
+      purchased: true,
+      userId,
+      id: orderId
     },
     include: [Animal]
   })
