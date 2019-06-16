@@ -25,17 +25,7 @@ router.get('/', async (req, res, next) => {
     //get cart from database
     let orders = await Order.getOrderHistoryForUserId(req.user.id)
 
-    const data = orders.map(order => ({
-      boughtOn: order.updatedAt,
-      animals: order.animals.map(animal => ({
-        id: animal.id,
-        name: animal.name,
-        imageUrl: animal.imageUrl,
-        timeUnit: animal.timeUnit,
-        price: animal.price,
-        quantity: animal.animalOrder.quantity
-      }))
-    }))
+    const data = orders.map(order => order.toJSON())
     res.json(data)
   } catch (error) {
     next(error)
@@ -52,17 +42,7 @@ router.get('/:orderId', async (req, res, next) => {
         error: Order.OrderDoesNotExistError
       })
     }
-    res.json({
-      boughtOn: order.updatedAt,
-      animals: order.animals.map(animal => ({
-        id: animal.id,
-        name: animal.name,
-        imageUrl: animal.imageUrl,
-        timeUnit: animal.timeUnit,
-        price: animal.price,
-        quantity: animal.animalOrder.quantity
-      }))
-    })
+    res.json(order.toJSON())
   } catch (error) {
     next(error)
   }
