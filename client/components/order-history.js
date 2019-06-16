@@ -1,8 +1,15 @@
-import React from 'react'
+import PropTypes from 'prop-types'
+import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import {getOrders} from '../store/orders'
 
 export const OrderHistory = props => {
+  // componentDidMount essentially
+  useEffect(() => {
+    props.getOrders()
+  }, [])
+
   return (
     <div className="order-history">
       {props.orders.map(order => (
@@ -54,8 +61,16 @@ export const OrderHistoryAnimalOrder = props => {
   )
 }
 
-const mapStateToProps = state => {}
+const mapStateToProps = state => ({
+  orders: state.orders
+})
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  getOrders: () => dispatch(getOrders())
+})
 
+OrderHistory.propTypes = {
+  getOrders: PropTypes.func.isRequired,
+  orders: PropTypes.array.isRequired
+}
 export default connect(mapStateToProps, mapDispatchToProps)(OrderHistory)
