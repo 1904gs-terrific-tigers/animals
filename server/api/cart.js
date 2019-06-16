@@ -7,7 +7,7 @@ const isLoggedIn = (req, res, next) => {
   //if not logged in ; send error
   const user = req.user
   if (!user) {
-    res.json({error: 'Must be logged in to do that.'})
+    res.status(401).json({error: 'Must be logged in to do that.'})
     return
   }
   //if a user is logged in ; we're happy

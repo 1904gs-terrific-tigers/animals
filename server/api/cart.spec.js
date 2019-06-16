@@ -62,7 +62,15 @@ describe('Cart routes', () => {
         }
       })
     })
+
     describe('GET /api/cart', () => {
+      it('should error if user not logged in', async () => {
+        const agent = request.agent(app)
+        const res = await agent.get('/api/cart').expect(401)
+
+        expect(res.body.error).to.exist
+      })
+
       it('gets a users cart', async () => {
         // regular auth to make sure person is authorized
         const agent = request.agent(app)
