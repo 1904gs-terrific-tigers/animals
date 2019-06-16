@@ -2,12 +2,15 @@ const router = require('express').Router()
 const {Order} = require('../db/models')
 module.exports = router
 
+const UserNotLoggedInError = new Error('Must be logged in to do that.')
+const EmptyCartError = new Error('Must have items in cart to checkout')
+
 //middleware to check that user is logged in
 const isLoggedIn = (req, res, next) => {
   //if not logged in ; send error
   const user = req.user
   if (!user) {
-    res.status(401).json({error: 'Must be logged in to do that.'})
+    res.status(401).json({error: UserNotLoggedInError})
     return
   }
   //if a user is logged in ; we're happy
@@ -52,7 +55,7 @@ router.post('/:animalId', async (req, res, next) => {
   } catch (error) {
     switch (error) {
       case Order.AnimalDoesNotExistError:
-        res.status(400).json({error: Order.AnimalDoesNotExistError})
+        res.status(400).json({error})
         break
       default:
         next(error)
@@ -66,7 +69,7 @@ router.put('/', async (req, res, next) => {
     const userId = req.user.id
     const [order, created] = await Order.getCurrentOrderForUserId(userId)
     if (!order.animals || order.animals.length === 0) {
-      return res.status(412).json({error: 'No items in cart.'})
+      return res.status(412).json({error: EmptyCartError})
     }
     order.set('purchased', true)
     await order.save()
@@ -86,7 +89,7 @@ router.put('/:animalId', async (req, res, next) => {
   } catch (error) {
     switch (error) {
       case Order.AnimalDoesNotExistError:
-        res.status(400).json({error: Order.AnimalDoesNotExistError})
+        res.status(400).json({error})
         break
       default:
         next(error)
