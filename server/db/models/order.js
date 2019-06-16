@@ -27,6 +27,16 @@ Order.getCurrentOrderForUserId = userId => {
   })
 }
 
+Order.getOrderHistoryForUserId = userId => {
+  return Order.findAll({
+    where: {
+      userId,
+      purchased: true
+    },
+    include: [Animal]
+  })
+}
+
 Order.prototype.addAnimalQuantity = async function(animalId, quantity) {
   const animal = await Animal.findByPk(animalId)
   if (!animal) {
