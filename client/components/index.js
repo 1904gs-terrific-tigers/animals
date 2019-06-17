@@ -5,8 +5,9 @@
  */
 export {default as AllAnimals} from './all-animals'
 export {Login, Signup} from './auth-form'
-export {default as Navbar} from './navbar'
-export {default as SingleAnimal} from './single-animal'
-export {default as UserHome} from './user-home'
 export {default as Cart} from './cart'
 export {default as CartItem} from './cart-item'
+export {default as Navbar} from './navbar'
+export {default as OrderHistory} from './order-history'
+export {default as SingleAnimal} from './single-animal'
+export {default as UserHome} from './user-home'
