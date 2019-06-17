@@ -4,6 +4,32 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {getOrders} from '../store/orders'
 
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import TableFooter from '@material-ui/core/TableFooter'
+import Button from '@material-ui/core/Button'
+
+const styles = {
+  root: {
+    width: '100%',
+    maxWidth: 360
+  },
+  paper: {
+    width: '100%',
+    overflowX: 'auto'
+  },
+  table: {
+    minWidth: 650
+  },
+  button: {
+    width: '100%'
+  }
+}
+
 export const OrderHistory = props => {
   // componentDidMount essentially
   useEffect(() => {
@@ -11,11 +37,25 @@ export const OrderHistory = props => {
   }, [])
 
   return (
-    <div className="order-history">
-      {props.orders.map(order => (
-        <OrderHistoryItem {...order} key={order.id} />
-      ))}
-    </div>
+    <Paper style={styles.paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell align="right" />
+            <TableCell align="right" />
+            <TableCell align="right" />
+            <TableCell align="right" />
+            <TableCell align="right" />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {props.orders.map(order => (
+            <OrderHistoryItem {...order} key={order.id} />
+          ))}
+        </TableBody>
+      </Table>
+    </Paper>
   )
 }
 
