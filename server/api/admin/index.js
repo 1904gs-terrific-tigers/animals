@@ -20,5 +20,14 @@ router.post('/animal', async (req, res, next) => {
 })
 
 router.put('/animal/:animalId', async (req, res, next) => {
-  res.sendStatus(204)
+  try {
+    await Animal.update(req.body, {
+      where: {
+        id: req.params.animalId
+      }
+    })
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
 })
