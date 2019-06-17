@@ -1,37 +1,109 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import Button from '@material-ui/core/Button'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import {makeStyles} from '@material-ui/core/styles'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <h1>Extreme Petting Zoo</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-      <div>
-        <Link to="/animals">See our awesome animal experiences!</Link>
-        <Link to="/cart">Cart</Link>
-      </div>
-    </nav>
-    <hr />
-  </div>
-)
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  title: {
+    flexGrow: 1,
+    marginRight: theme.spacing(2)
+  }
+}))
 
+const Navbar = ({handleClick, isLoggedIn}) => {
+  const classes = useStyles()
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" style={{alignItems: 'center'}}>
+        <div>
+          <Toolbar>
+            <div>
+              <Button
+                component={Link}
+                to="/animals"
+                className={classes.menuButton}
+                variant="contained"
+                color="primary"
+              >
+                View Animals
+              </Button>
+              <Button
+                className={classes.menuButton}
+                component={Link}
+                to="/cart"
+                variant="contained"
+                color="primary"
+              >
+                Shopping Cart
+              </Button>
+            </div>
+            <Typography className={classes.title} color="inherit">
+              Extreme Petting Zoo
+            </Typography>
+            {isLoggedIn ? (
+              <div>
+                <Button
+                  className={classes.menuButton}
+                  component={Link}
+                  to="/home"
+                  variant="contained"
+                  color="primary"
+                >
+                  Home
+                </Button>
+
+                <Button
+                  className={classes.menuButton}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleClick}
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div>
+                {/* The navbar will show these links before you log in */}
+                <Button
+                  className={classes.menuButton}
+                  component={Link}
+                  to="/login"
+                  variant="contained"
+                  color="primary"
+                >
+                  Login
+                </Button>
+                <Button
+                  className={classes.menuButton}
+                  component={Link}
+                  to="/signup"
+                  variant="contained"
+                  color="primary"
+                >
+                  Sign Up
+                </Button>
+              </div>
+            )}
+            <hr />
+          </Toolbar>
+        </div>
+      </AppBar>
+    </div>
+  )
+}
 /**
  * CONTAINER
  */

@@ -1,13 +1,16 @@
 const router = require('express').Router()
-const {Order, AnimalOrder, Animal} = require('../db/models')
+const {Order} = require('../db/models')
 module.exports = router
+
+const UserNotLoggedInError = new Error('Must be logged in to do that.')
+const EmptyCartError = new Error('Must have items in cart to checkout')
 
 //middleware to check that user is logged in
 const isLoggedIn = (req, res, next) => {
   //if not logged in ; send error
   const user = req.user
   if (!user) {
-    res.json({error: 'Must be logged in to do that.'})
+    res.status(401).json({error: UserNotLoggedInError})
     return
   }
   //if a user is logged in ; we're happy
@@ -47,12 +50,12 @@ router.post('/:animalId', async (req, res, next) => {
     // gives us an order with only 1 animal
     // and the attached animalOrder with the correct quantity
     const [cart, created] = await Order.getCurrentOrderForUserId(req.user.id)
-    await cart.addAnimalQuantity(+req.params.animalId, req.body.quantity)
+    await cart.addAnimalQuantity(+req.params.animalId, +req.body.quantity)
     res.sendStatus(204)
   } catch (error) {
     switch (error) {
       case Order.AnimalDoesNotExistError:
-        res.json({error: Order.AnimalDoesNotExistError})
+        res.status(400).json({error})
         break
       default:
         next(error)
@@ -66,7 +69,7 @@ router.put('/', async (req, res, next) => {
     const userId = req.user.id
     const [order, created] = await Order.getCurrentOrderForUserId(userId)
     if (!order.animals || order.animals.length === 0) {
-      return res.status(412).json({error: 'No items in cart.'})
+      return res.status(412).json({error: EmptyCartError})
     }
     order.set('purchased', true)
     await order.save()
@@ -81,12 +84,12 @@ router.put('/:animalId', async (req, res, next) => {
   try {
     const userId = req.user.id
     const [order, created] = await Order.getCurrentOrderForUserId(userId)
-    await order.setAnimalQuantity(req.params.animalId, req.body.quantity)
+    await order.setAnimalQuantity(+req.params.animalId, +req.body.quantity)
     res.sendStatus(204)
   } catch (error) {
     switch (error) {
       case Order.AnimalDoesNotExistError:
-        res.json({error: Order.AnimalDoesNotExistError})
+        res.status(400).json({error})
         break
       default:
         next(error)
@@ -99,7 +102,7 @@ router.delete('/:animalId', async (req, res, next) => {
   try {
     const userId = req.user.id
     const [order, created] = await Order.getCurrentOrderForUserId(userId)
-    await order.deleteAnimalOrder(req.params.animalId)
+    await order.deleteAnimalOrder(+req.params.animalId)
     res.sendStatus(204)
   } catch (error) {
     next(error)

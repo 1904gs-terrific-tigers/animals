@@ -16,32 +16,12 @@ const gotCart = cart => ({type: GOT_CART, cart})
 const updateQt = (id, qt) => ({type: UPDATE_QUANTITY, id, qt})
 const submitOrder = () => ({type: SUBMIT_ORDER})
 const removeItem = id => ({type: REMOVE_ITEM, id})
-const addedItem = id => ({type: ADDED_ITEM, animal, qt})
+const addedItem = (animal, qt) => ({type: ADDED_ITEM, animal, qt})
 
 /**
  * INITIAL STATE
  */
 const initialState = []
-
-const fakeState = [
-  {
-    id: 1,
-    name: 'Cody',
-    imageUrl:
-      'https://media.treehugger.com/assets/images/2018/03/sloth-sounds.jpg.860x0_q70_crop-scale.jpg',
-    species: 'sloth',
-    price: 1,
-    quantity: 2
-  },
-  {
-    id: 2,
-    name: 'Spend time with catboat',
-    imageUrl: 'http://catbo.at/catboat.jpg',
-    species: 'catboat',
-    price: 100,
-    quantity: 3
-  }
-]
 
 /**
  * THUNK CREATORS
