@@ -67,6 +67,16 @@ const Navbar = ({handleClick, isLoggedIn}) => {
 
                 <Button
                   className={classes.menuButton}
+                  component={Link}
+                  to="/orders"
+                  variant="contained"
+                  color="primary"
+                >
+                  Orders
+                </Button>
+
+                <Button
+                  className={classes.menuButton}
                   variant="contained"
                   color="primary"
                   onClick={handleClick}
