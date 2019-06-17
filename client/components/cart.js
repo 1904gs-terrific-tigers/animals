@@ -53,9 +53,7 @@ export class Cart extends Component {
   }
 
   render() {
-    let localCart = Object.values(localStorage)
-    let parsedLocalCart = localCart.map(animal => JSON.parse(animal))
-    console.log('parsedLocalCart', parsedLocalCart)
+    let localCart = JSON.parse(localStorage.getItem('cart'))
 
     return (
       <Paper style={styles.paper}>
@@ -81,7 +79,7 @@ export class Cart extends Component {
                     handleRemove={this.handleRemove}
                   />
                 ))
-              : parsedLocalCart.map(item => (
+              : localCart.map(item => (
                   <CartItem
                     key={item.id}
                     item={item}
@@ -130,6 +128,3 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
-
-//    //if (this.props.cart.length !== 0) {
-//    } else return <div />
