@@ -103,9 +103,20 @@ export default (state = initialState, action) => {
       newState.splice(idx, 1)
       break
     case ADDED_ITEM:
-      let item = action.animal
-      item.quantity = action.qt
-      newState.push(item)
+      {
+        let item = action.animal
+        item.quantity = action.qt
+        const idx = newState.findIndex(obj => obj.id === item.id)
+        if (idx > -1) {
+          newState[idx] = {
+            ...newState[idx],
+            ...item,
+            quantity: newState[idx].quantity + action.qt
+          }
+        } else {
+          newState.push(item)
+        }
+      }
       break
     default:
       break
