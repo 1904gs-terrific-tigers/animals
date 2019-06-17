@@ -65,9 +65,12 @@ Order.getUserOrder = (userId, orderId) => {
 }
 
 Order.prototype.addAnimalQuantity = async function(animalId, quantity) {
+  if (!isNumber(animalId)) {
+    throw Order.AnimalDoesNotExistError
+  }
   const animal = await Animal.findByPk(animalId)
   if (!animal) {
-    throw AnimalDoesNotExistError
+    throw Order.AnimalDoesNotExistError
   }
   const [cartItem, created] = await AnimalOrder.findOrCreate({
     where: {
@@ -91,10 +94,18 @@ Order.prototype.addAnimalQuantity = async function(animalId, quantity) {
   return true
 }
 
+//https://stackoverflow.com/questions/9716468
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n)
+}
+
 Order.prototype.setAnimalQuantity = async function(animalId, quantity) {
+  if (!isNumber(animalId)) {
+    throw Order.AnimalDoesNotExistError
+  }
   const animal = await Animal.findByPk(animalId)
   if (!animal) {
-    throw AnimalDoesNotExistError
+    throw Order.AnimalDoesNotExistError
   }
   const [cartItem, created] = await AnimalOrder.findOrCreate({
     where: {
@@ -118,9 +129,12 @@ Order.prototype.setAnimalQuantity = async function(animalId, quantity) {
 }
 
 Order.prototype.deleteAnimalOrder = async function(animalId) {
+  if (!isNumber(animalId)) {
+    throw Order.AnimalDoesNotExistError
+  }
   const animal = await Animal.findByPk(animalId)
   if (!animal) {
-    throw AnimalDoesNotExistError
+    throw Order.AnimalDoesNotExistError
   }
   await AnimalOrder.destroy({
     where: {
