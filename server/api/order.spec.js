@@ -87,7 +87,7 @@ describe('Order routes', () => {
       expect(res.body).to.have.lengthOf(2)
 
       // not sure if it's always sorted, so let's sort
-      res.body.sort((a, b) => a.boughtOn < b.boughtOn)
+      res.body.sort((a, b) => a.id > b.id)
       expect(res.body.map(o => o.id)).to.have.members([order1.id, order2.id])
 
       const [firstOrder, secondOrder] = res.body.map(order =>
