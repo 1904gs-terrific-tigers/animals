@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import TableFooter from '@material-ui/core/TableFooter'
 import Button from '@material-ui/core/Button'
+import axios from 'axios'
 
 const styles = {
   root: {
@@ -31,30 +32,14 @@ const styles = {
 export class Cart extends Component {
   constructor() {
     super()
+
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleRemove = this.handleRemove.bind(this)
   }
-  componentDidMount() {
-    // if(!this.props.isLoggedIn) {
-    //   let localCart = localStorage;
-    //   console.log('got here', localCart)
-    //   this.props.gettingAnimal(Number(localStorage.key));
-    //   console.log('cart after ls :', localCart)
-    // } else this.props.getItem()
 
+  componentDidMount() {
     if (this.props.isLoggedIn) this.props.getItem()
-    else {
-      console.log('in else')
-      let localCart = Object.keys(localStorage)
-      console.log('localCart: ', localCart)
-      let cartWA = localCart.map(async key => {
-        key = Number(key)
-        const data = await this.props.gettingAnimal(key)
-        return data
-      })
-      console.log('cart with animals', cartWA)
-    }
   }
 
   handleRemove(id) {
@@ -64,71 +49,68 @@ export class Cart extends Component {
     this.props.submitOrder()
   }
   handleChange(id, event) {
-    console.log(event.target)
     this.props.updatingCart(Number(id), Number(event.target.value))
   }
-  render() {
-    const localCart = localStorage
-    if (this.props.cart.length !== 0) {
-      return (
-        <Paper style={styles.paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell align="right">Activity</TableCell>
-                <TableCell align="right">Price</TableCell>
-                <TableCell align="right">Quantity</TableCell>
-                <TableCell align="right">Subtotal</TableCell>
-                <TableCell align="right">Remove</TableCell>
-              </TableRow>
-            </TableHead>
 
-            <TableBody>
-              {this.props.isLoggedIn
-                ? this.props.cart.map(item => (
-                    <CartItem
-                      key={item.id}
-                      item={item}
-                      handleChange={this.handleChange}
-                      handleRemove={this.handleRemove}
-                    />
-                  ))
-                : localStorage.map(item => (
-                    <CartItem
-                      key={item.id}
-                      item={item}
-                      handleChange={this.handleChange}
-                      handleRemove={this.handleRemove}
-                    />
-                  ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell />
-                <TableCell align="right" />
-                <TableCell align="right" />
-                <TableCell align="right" />
-                <TableCell align="right">Total:</TableCell>
-                <TableCell align="right">
-                  ${this.props.cart.reduce(
-                    (acc, item) => acc + item.quantity * item.price,
-                    0
-                  )}
-                </TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
-          <Button
-            style={styles.button}
-            type="submit"
-            onClick={this.handleSubmit}
-          >
-            Submit Order
-          </Button>
-        </Paper>
-      )
-    } else return <div />
+  render() {
+    let localCart = Object.values(localStorage)
+    let parsedLocalCart = localCart.map(animal => JSON.parse(animal))
+    console.log('parsedLocalCart', parsedLocalCart)
+
+    return (
+      <Paper style={styles.paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell align="right">Activity</TableCell>
+              <TableCell align="right">Price</TableCell>
+              <TableCell align="right">Quantity</TableCell>
+              <TableCell align="right">Subtotal</TableCell>
+              <TableCell align="right">Remove</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {this.props.isLoggedIn
+              ? this.props.cart.map(item => (
+                  <CartItem
+                    key={item.id}
+                    item={item}
+                    handleChange={this.handleChange}
+                    handleRemove={this.handleRemove}
+                  />
+                ))
+              : parsedLocalCart.map(item => (
+                  <CartItem
+                    key={item.id}
+                    item={item}
+                    handleChange={this.handleChange}
+                    handleRemove={this.handleRemove}
+                  />
+                ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell />
+              <TableCell align="right" />
+              <TableCell align="right" />
+              <TableCell align="right" />
+              <TableCell align="right">Total:</TableCell>
+              <TableCell align="right">
+                ${this.props.cart.reduce(
+                  (acc, item) => acc + item.quantity * item.price,
+                  0
+                )}
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+        <Button style={styles.button} type="submit" onClick={this.handleSubmit}>
+          Submit Order
+        </Button>
+      </Paper>
+    )
   }
 }
 
@@ -148,3 +130,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
+
+//    //if (this.props.cart.length !== 0) {
+//    } else return <div />

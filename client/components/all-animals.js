@@ -56,12 +56,9 @@ export class AllAnimals extends React.Component {
     else {
       let key = animal.id
       if (!(key in localStorage)) {
-        localStorage.setItem(key, qt)
-        console.log('i was clicked', 'qt: ', qt)
-        console.log('local', localStorage)
+        localStorage.setItem(key, JSON.stringify(animal))
       } else {
         localStorage[key]++
-        console.log('incremented?', localStorage)
       }
     }
   }
