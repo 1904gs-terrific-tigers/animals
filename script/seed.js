@@ -50,7 +50,7 @@ async function seed() {
     Animal.create({
       name: 'Run with Secretariat',
       imageUrl:
-        'https://media.discordapp.net/attachments/123623920879271937/588868872787067074/20190221_192651-1.jpg?width=276&height=411',
+        'https://upload.wikimedia.org/wikipedia/en/d/df/Secretariat_at_stud.jpg',
       description:
         'For our runner customers. Do your speed workout with our fastest horse and get that PR',
       species: 'horse',
