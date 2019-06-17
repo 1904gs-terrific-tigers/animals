@@ -52,7 +52,18 @@ export class AllAnimals extends React.Component {
 
     //jk comments.  I changed to a add to cart icon, which has no qty value, the qty is assumed to be one, which makes this less hacky.
     const qt = 1
-    this.props.addAnimalTocart(animal, qt)
+    if (this.props.isLoggedIn) this.props.addAnimalTocart(animal, qt)
+    else {
+      let key = animal.name
+      if (!(key in localStorage)) {
+        localStorage.setItem(key, qt)
+        console.log('i was clicked', 'qt: ', qt)
+        console.log('local', localStorage)
+      } else {
+        localStorage[key]++
+        console.log('incremented?', localStorage)
+      }
+    }
   }
 
   render() {
@@ -95,7 +106,10 @@ export class AllAnimals extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {animals: state.animals}
+  return {
+    isLoggedIn: !!state.user.id,
+    animals: state.animals
+  }
 }
 
 const mapDispatchToProps = dispatch => ({
