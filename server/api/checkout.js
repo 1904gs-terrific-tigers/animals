@@ -1,7 +1,8 @@
 const router = require('express').Router()
-module.exports = router
-
+const {Order} = require('../db/models')
 const configureStripe = require('stripe')
+
+module.exports = router
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
 
