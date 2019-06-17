@@ -12,7 +12,7 @@ const isLoggedIn = (req, res, next) => {
     res.json({error: 'Must be logged in to do that.'})
     return
   }
-  //if a user is logged in ; we're happy
+  //if a user is logged in, we're happy
   if (user) {
     next()
   }
