@@ -9,7 +9,23 @@ const Order = db.define('order', {
     defaultValue: false
   }
 })
-Order.AnimalDoesNotExistError = new Error('Animal does not exist.')
+Order.AnimalDoesNotExistError = 'Animal does not exist.'
+Order.OrderDoesNotExistError = 'Order does not exist.'
+
+Order.prototype.toJSON = function() {
+  return {
+    id: this.id,
+    boughtOn: this.updatedAt,
+    animals: this.animals.map(animal => ({
+      id: animal.id,
+      name: animal.name,
+      imageUrl: animal.imageUrl,
+      timeUnit: animal.timeUnit,
+      price: animal.price,
+      quantity: animal.animalOrder.quantity
+    }))
+  }
+}
 
 // returns an array of [order, newlyCreated]
 // this will create an order for the user if one does not exist
@@ -24,6 +40,27 @@ Order.getCurrentOrderForUserId = userId => {
       userId,
       purchased: false
     }
+  })
+}
+
+Order.getOrderHistoryForUserId = userId => {
+  return Order.findAll({
+    where: {
+      userId,
+      purchased: true
+    },
+    include: [Animal]
+  })
+}
+
+Order.getUserOrder = (userId, orderId) => {
+  return Order.findOne({
+    where: {
+      purchased: true,
+      userId,
+      id: orderId
+    },
+    include: [Animal]
   })
 }
 
