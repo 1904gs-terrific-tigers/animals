@@ -64,6 +64,21 @@ Order.getUserOrder = (userId, orderId) => {
   })
 }
 
+Order.prototype.getHandlerToPurchase = function() {
+  // error out if empty cart
+  if (!this.animals || this.animals.length === 0) {
+    return ['Cart cannot be empty if you are trying to purchase!', undefined]
+  }
+  //return a handler that will set the order to purchased if called
+  return [
+    undefined,
+    () => {
+      this.set('purchased', true)
+      return this.save()
+    }
+  ]
+}
+
 Order.prototype.addAnimalQuantity = async function(animalId, quantity) {
   if (!isNumber(animalId)) {
     throw Order.AnimalDoesNotExistError
