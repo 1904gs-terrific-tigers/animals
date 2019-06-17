@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getCart, remove, submit, updateCart} from '../store'
+import {getCart, remove, submit, updateCart, getAnimal} from '../store'
 import CartItem from './cart-item'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -36,7 +36,25 @@ export class Cart extends Component {
     this.handleRemove = this.handleRemove.bind(this)
   }
   componentDidMount() {
-    this.props.getItem()
+    // if(!this.props.isLoggedIn) {
+    //   let localCart = localStorage;
+    //   console.log('got here', localCart)
+    //   this.props.gettingAnimal(Number(localStorage.key));
+    //   console.log('cart after ls :', localCart)
+    // } else this.props.getItem()
+
+    if (this.props.isLoggedIn) this.props.getItem()
+    else {
+      console.log('in else')
+      let localCart = Object.keys(localStorage)
+      console.log('localCart: ', localCart)
+      let cartWA = localCart.map(async key => {
+        key = Number(key)
+        const data = await this.props.gettingAnimal(key)
+        return data
+      })
+      console.log('cart with animals', cartWA)
+    }
   }
 
   handleRemove(id) {
@@ -50,6 +68,7 @@ export class Cart extends Component {
     this.props.updatingCart(Number(id), Number(event.target.value))
   }
   render() {
+    const localCart = localStorage
     if (this.props.cart.length !== 0) {
       return (
         <Paper style={styles.paper}>
@@ -64,15 +83,25 @@ export class Cart extends Component {
                 <TableCell align="right">Remove</TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
-              {this.props.cart.map(item => (
-                <CartItem
-                  key={item.id}
-                  item={item}
-                  handleChange={this.handleChange}
-                  handleRemove={this.handleRemove}
-                />
-              ))}
+              {this.props.isLoggedIn
+                ? this.props.cart.map(item => (
+                    <CartItem
+                      key={item.id}
+                      item={item}
+                      handleChange={this.handleChange}
+                      handleRemove={this.handleRemove}
+                    />
+                  ))
+                : localStorage.map(item => (
+                    <CartItem
+                      key={item.id}
+                      item={item}
+                      handleChange={this.handleChange}
+                      handleRemove={this.handleRemove}
+                    />
+                  ))}
             </TableBody>
             <TableFooter>
               <TableRow>
@@ -105,7 +134,8 @@ export class Cart extends Component {
 
 const mapStateToProps = state => {
   return {
-    cart: state.cart
+    cart: state.cart,
+    isLoggedIn: !!state.user.id
   }
 }
 
@@ -113,7 +143,8 @@ const mapDispatchToProps = dispatch => ({
   getItem: () => dispatch(getCart()),
   updatingCart: (id, qt) => dispatch(updateCart(id, qt)),
   submitOrder: () => dispatch(submit()),
-  removeItem: id => dispatch(remove(id))
+  removeItem: id => dispatch(remove(id)),
+  gettingAnimal: id => dispatch(getAnimal(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)

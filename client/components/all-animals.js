@@ -54,7 +54,7 @@ export class AllAnimals extends React.Component {
     const qt = 1
     if (this.props.isLoggedIn) this.props.addAnimalTocart(animal, qt)
     else {
-      let key = animal.name
+      let key = animal.id
       if (!(key in localStorage)) {
         localStorage.setItem(key, qt)
         console.log('i was clicked', 'qt: ', qt)
