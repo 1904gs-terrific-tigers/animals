@@ -4,11 +4,12 @@ import {connect} from 'react-redux'
 import {Route, Switch, withRouter} from 'react-router-dom'
 import {
   AllAnimals,
+  Cart,
   Login,
+  OrderHistory,
   Signup,
   SingleAnimal,
-  UserHome,
-  Cart
+  UserHome
 } from './components'
 import {me} from './store'
 
@@ -37,6 +38,7 @@ class Routes extends Component {
             <Route path="/animals" exact component={AllAnimals} />
             <Route path="/animals/:animalId" component={SingleAnimal} />
             <Route path="/cart" component={Cart} />
+            <Route path="/orders" component={OrderHistory} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
