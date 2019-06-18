@@ -13,15 +13,15 @@ const ADDED_ITEM = 'ADDED_ITEM'
  * ACTION CREATORS
  */
 const gotCart = cart => ({type: GOT_CART, cart})
-const updateQt = (id, qt) => ({type: UPDATE_QUANTITY, id, qt})
+export const updateQt = (id, qt) => ({type: UPDATE_QUANTITY, id, qt})
 const submitOrder = () => ({type: SUBMIT_ORDER})
-const removeItem = id => ({type: REMOVE_ITEM, id})
-const addedItem = (animal, qt) => ({type: ADDED_ITEM, animal, qt})
+export const removeItem = id => ({type: REMOVE_ITEM, id})
+export const addedItem = (animal, qt) => ({type: ADDED_ITEM, animal, qt})
 
 /**
  * INITIAL STATE
  */
-const initialState = []
+const initialState = JSON.parse(localStorage.getItem('cart')) || []
 
 /**
  * THUNK CREATORS
@@ -121,5 +121,6 @@ export default (state = initialState, action) => {
     default:
       break
   }
+  localStorage.setItem('cart', JSON.stringify(newState))
   return newState
 }
