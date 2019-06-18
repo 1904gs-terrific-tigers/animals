@@ -62,7 +62,15 @@ describe('Cart routes', () => {
         }
       })
     })
+
     describe('GET /api/cart', () => {
+      it('should error if user not logged in', async () => {
+        const agent = request.agent(app)
+        const res = await agent.get('/api/cart').expect(401)
+
+        expect(res.body.error).to.exist
+      })
+
       it('gets a users cart', async () => {
         // regular auth to make sure person is authorized
         const agent = request.agent(app)
@@ -119,48 +127,20 @@ describe('Cart routes', () => {
       })
     })
 
-    describe('PUT /api/cart/', () => {
-      // should check to see if cart exists.
-      // if it exists and is not empty (no items inside cart), set bought to true. do nothing otherwise.
-
-      it('should set cart to purchased if it has items in it', async () => {
-        // regular auth to make sure person is authorized
-        const agent = request.agent(app)
-        await agent.post('/auth/login').send(userSignIn)
-
-        // sanity check
-        expect(dummyOrder.purchased).to.be.false
-
-        // actually update the cart now
-        await agent.put('/api/cart').expect(204)
-
-        // and now we'll check the order to make sure it's changed
-        const updatedOrder = await Order.findOne({id: dummyOrder.id})
-        expect(updatedOrder.purchased).to.be.true
-      })
-
-      it('should do nothing if the cart has no items in it', async () => {
-        // we'll remove cody from the order first
-        await dummyOrder.removeAnimal(cody)
-
-        // regular auth to make sure person is authorized
-        const agent = request.agent(app)
-        await agent.post('/auth/login').send(userSignIn)
-        // sanity check
-        expect(dummyOrder.purchased).to.be.false
-
-        // we expect some 400-series error because not allowed
-        const res = await agent.put('/api/cart').expect(412)
-        // we expect an error to be in the body with some message
-        expect(res.body.error).to.exist
-
-        // and now let's check to make sure it didn't do anything
-        const updatedOrder = await Order.findOne({id: dummyOrder.id})
-        expect(updatedOrder.purchased).to.be.false
-      })
-    })
-
     describe('POST /api/cart/:animalId', () => {
+      it('should error if animalId is not a valid variable', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        const res = await agent
+          .post(`/api/cart/a`)
+          .send({quantity: 3})
+          .expect(400)
+
+        expect(res.body.error).to.exist
+      })
+
       it('should set item to given amount if the cart does not have the item in the cart currently', async () => {
         // regular auth to make sure person is authorized
         const agent = request.agent(app)
@@ -222,10 +202,22 @@ describe('Cart routes', () => {
         expect(animals).to.be.an('array')
         expect(animals).to.have.lengthOf(1)
       })
-      // TODO add test for if animal does not exist in db
     })
 
     describe('PUT /api/cart/:animalId', () => {
+      it('should error if animalId is not a valid variable', async () => {
+        // regular auth to make sure person is authorized
+        const agent = request.agent(app)
+        await agent.post('/auth/login').send(userSignIn)
+
+        const res = await agent
+          .put(`/api/cart/a`)
+          .send({quantity: 3})
+          .expect(400)
+
+        expect(res.body.error).to.exist
+      })
+
       it('should set item to given amount if the cart does not have the item in the cart currently', async () => {
         // regular auth to make sure person is authorized
         const agent = request.agent(app)

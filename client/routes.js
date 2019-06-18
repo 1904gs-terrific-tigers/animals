@@ -31,6 +31,10 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/" exact component={AllAnimals} />
+        <Route path="/animals" exact component={AllAnimals} />
+        <Route path="/animals/:animalId" component={SingleAnimal} />
+        <Route path="/cart" component={Cart} />
 
         {isLoggedIn && (
           <Switch>
@@ -46,6 +50,9 @@ class Routes extends Component {
             {isAdmin && (
               <Route path="/admin/animals" component={AdminAnimals} />
             )}
+
+            <Route path="/orders" component={OrderHistory} />
+            <Route path="/thank-you" component={ThankYou} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

@@ -9,7 +9,23 @@ const Order = db.define('order', {
     defaultValue: false
   }
 })
-Order.AnimalDoesNotExistError = new Error('Animal does not exist.')
+Order.AnimalDoesNotExistError = 'Animal does not exist.'
+Order.OrderDoesNotExistError = 'Order does not exist.'
+
+Order.prototype.toJSON = function() {
+  return {
+    id: this.id,
+    boughtOn: this.updatedAt,
+    animals: this.animals.map(animal => ({
+      id: animal.id,
+      name: animal.name,
+      imageUrl: animal.imageUrl,
+      timeUnit: animal.timeUnit,
+      price: animal.price,
+      quantity: animal.animalOrder.quantity
+    }))
+  }
+}
 
 // returns an array of [order, newlyCreated]
 // this will create an order for the user if one does not exist
@@ -27,10 +43,49 @@ Order.getCurrentOrderForUserId = userId => {
   })
 }
 
+Order.getOrderHistoryForUserId = userId => {
+  return Order.findAll({
+    where: {
+      userId,
+      purchased: true
+    },
+    include: [Animal]
+  })
+}
+
+Order.getUserOrder = (userId, orderId) => {
+  return Order.findOne({
+    where: {
+      purchased: true,
+      userId,
+      id: orderId
+    },
+    include: [Animal]
+  })
+}
+
+Order.prototype.getHandlerToPurchase = function() {
+  // error out if empty cart
+  if (!this.animals || this.animals.length === 0) {
+    return ['Cart cannot be empty if you are trying to purchase!', undefined]
+  }
+  //return a handler that will set the order to purchased if called
+  return [
+    undefined,
+    () => {
+      this.set('purchased', true)
+      return this.save()
+    }
+  ]
+}
+
 Order.prototype.addAnimalQuantity = async function(animalId, quantity) {
+  if (!isNumber(animalId)) {
+    throw Order.AnimalDoesNotExistError
+  }
   const animal = await Animal.findByPk(animalId)
   if (!animal) {
-    throw AnimalDoesNotExistError
+    throw Order.AnimalDoesNotExistError
   }
   const [cartItem, created] = await AnimalOrder.findOrCreate({
     where: {
@@ -54,10 +109,18 @@ Order.prototype.addAnimalQuantity = async function(animalId, quantity) {
   return true
 }
 
+//https://stackoverflow.com/questions/9716468
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n)
+}
+
 Order.prototype.setAnimalQuantity = async function(animalId, quantity) {
+  if (!isNumber(animalId)) {
+    throw Order.AnimalDoesNotExistError
+  }
   const animal = await Animal.findByPk(animalId)
   if (!animal) {
-    throw AnimalDoesNotExistError
+    throw Order.AnimalDoesNotExistError
   }
   const [cartItem, created] = await AnimalOrder.findOrCreate({
     where: {
@@ -81,9 +144,12 @@ Order.prototype.setAnimalQuantity = async function(animalId, quantity) {
 }
 
 Order.prototype.deleteAnimalOrder = async function(animalId) {
+  if (!isNumber(animalId)) {
+    throw Order.AnimalDoesNotExistError
+  }
   const animal = await Animal.findByPk(animalId)
   if (!animal) {
-    throw AnimalDoesNotExistError
+    throw Order.AnimalDoesNotExistError
   }
   await AnimalOrder.destroy({
     where: {

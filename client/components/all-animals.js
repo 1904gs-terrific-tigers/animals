@@ -2,7 +2,38 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {gettingAnimals} from '../store/animals'
-import {addItem} from '../store/cart'
+import {addItem, addedItem} from '../store/cart'
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import IconButton from '@material-ui/core/IconButton'
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+
+const styles = {
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden'
+  },
+  gridList: {
+    width: 1000,
+    height: 900
+  },
+  icon: {
+    color: 'rgba(255, 255, 255, 0.54)'
+  },
+  img: {
+    zoom: 3,
+    display: 'block',
+    margin: 'auto',
+    height: '100%',
+    maxHeight: '100%',
+    width: '100%',
+    maxWidth: '100%'
+  }
+}
 
 export class AllAnimals extends React.Component {
   constructor() {
@@ -16,49 +47,64 @@ export class AllAnimals extends React.Component {
   }
 
   handleAddToCart(event, animal) {
-    // this is a really hacky way to do this but it works for now.
-    // if the structure below is changed, this will probably not work anymore
-    const qt = event.target.previousSibling.value
-    this.props.addAnimalTocart(animal, qt)
+    //jk: I changed to a add to cart icon, which has no qty value,
+    //the qty is assumed to be one, which makes this less hacky.
+    const qt = 1
+    if (this.props.isLoggedIn) this.props.addAnimalTocart(animal, qt)
+    else {
+      this.props.addAnimalToGuest(animal, qt)
+    }
   }
 
   render() {
     return (
-      <div>
-        {this.props.animals.map(animal => {
-          const animalUrl = `/animals/${animal.id}`
-          return (
-            <div key={animal.id}>
-              <Link to={animalUrl}>
-                <h2>{animal.name}</h2>
-              </Link>
-              <Link to={animalUrl}>
-                <img src={animal.imageUrl} />
-              </Link>
-              <h3>Price: {animal.price}</h3>
-              <input type="number" />
-              <button
-                type="submit"
-                onClick={event => {
-                  this.handleAddToCart(event, animal)
-                }}
-              >
-                Add to Cart
-              </button>
-            </div>
-          )
-        })}
+      <div style={styles.root}>
+        <GridList cellHeight={360} style={styles.gridList}>
+          <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
+            <ListSubheader component="div">Animals</ListSubheader>
+          </GridListTile>
+          {this.props.animals.map(animal => {
+            const animalUrl = `/animals/${animal.id}`
+            return (
+              <GridListTile key={animal.id}>
+                <Link to={animalUrl}>
+                  <img style={styles.img} src={animal.imageUrl} />
+                </Link>
+                <GridListTileBar
+                  title={animal.name}
+                  subtitle={<span>price {animal.price}</span>}
+                  actionIcon={
+                    <IconButton
+                      aria-label="add to cart"
+                      style={styles.icon}
+                      type="submit"
+                      onClick={event => {
+                        this.handleAddToCart(event, animal)
+                      }}
+                    >
+                      <AddShoppingCartIcon />
+                    </IconButton>
+                  }
+                />
+              </GridListTile>
+            )
+          })}
+        </GridList>
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  return {animals: state.animals}
+  return {
+    isLoggedIn: !!state.user.id,
+    animals: state.animals
+  }
 }
 
 const mapDispatchToProps = dispatch => ({
   getAnimals: () => dispatch(gettingAnimals()),
+  addAnimalToGuest: (animal, qt) => dispatch(addedItem(animal, qt)),
   addAnimalTocart: (animal, qt) => dispatch(addItem(animal, qt))
 })
 

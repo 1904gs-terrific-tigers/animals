@@ -28,10 +28,9 @@ const isAdmin = (req, res, next) => {
 router.use('/users', require('./users'))
 router.use('/animals', require('./animals'))
 router.use('/cart', require('./cart'))
-router.use('/admin', isLoggedIn, isAdmin, require('./admin'))
+router.use('/orders', require('./order'))
 
 router.use((req, res, next) => {
-  const error = new Error('Not Found')
   error.status = 404
   next(error)
 })

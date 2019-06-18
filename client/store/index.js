@@ -6,9 +6,10 @@ import admin from './admin'
 import animal from './animal'
 import animals from './animals'
 import cart from './cart'
+import orders from './orders'
 import user from './user'
 
-const reducer = combineReducers({user, animals, animal, cart, admin})
+const reducer = combineReducers({user, animals, animal, cart, admin, orders})
 
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -20,4 +21,5 @@ export default store
 export * from './animal'
 export * from './animals'
 export * from './cart'
+export * from './orders'
 export * from './user'
