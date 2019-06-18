@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
 import {gettingAnimals} from '../../store'
-import {updateAnimal} from '../../store/admin'
+import {createAnimal, updateAnimal} from '../../store/admin'
 
 export const Animals = props => {
   console.log('animals loaded')
@@ -13,6 +13,11 @@ export const Animals = props => {
   // have a animalItem component to check stuff and have inputs
   return (
     <div>
+      <AnimalForm
+        onSubmit={data => {
+          props.createAnimal(data)
+        }}
+      />
       {props.animals.map(animal => {
         const animalUrl = `/animals/${animal.id}`
         return (
@@ -20,7 +25,6 @@ export const Animals = props => {
             key={animal.id}
             {...animal}
             onSubmit={data => {
-              console.log(data)
               props.updateAnimal(animal.id, data)
             }}
           />
@@ -38,6 +42,10 @@ const makeOnChange = setter => event => {
 
 const AnimalForm = props => {
   const [name, setName] = useState(props.name)
+  const [description, setDescription] = useState(props.description)
+  const [imageUrl, setImageUrl] = useState(props.imageUrl)
+  const [species, setSpecies] = useState(props.species)
+  const [price, setPrice] = useState(props.price)
   return (
     <div>
       <div>
@@ -48,11 +56,39 @@ const AnimalForm = props => {
           value={name}
           onChange={makeOnChange(setName)}
         />
+        <textarea
+          name="description"
+          type="text"
+          value={description}
+          onChange={makeOnChange(setDescription)}
+        />
+        <input
+          name="imageUrl"
+          type="text"
+          value={imageUrl}
+          onChange={makeOnChange(setImageUrl)}
+        />
+        <input
+          name="species"
+          type="text"
+          value={species}
+          onChange={makeOnChange(setSpecies)}
+        />
+        <input
+          name="price"
+          type="number"
+          value={price}
+          onChange={makeOnChange(setPrice)}
+        />
         <button
           type="submit"
           onClick={() => {
             props.onSubmit({
-              name
+              name,
+              description,
+              imageUrl,
+              species,
+              price
             })
           }}
         >
@@ -69,7 +105,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   getAnimals: () => dispatch(gettingAnimals()),
-  updateAnimal: (id, animal) => dispatch(updateAnimal(id, animal))
+  updateAnimal: (id, animal) => dispatch(updateAnimal(id, animal)),
+  createAnimal: animal => dispatch(createAnimal(animal))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Animals)
