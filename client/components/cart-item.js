@@ -9,8 +9,27 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
+import {makeStyles} from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  textField: {
+    marginLeft: theme.spacing(20),
+    marginRight: theme.spacing(1)
+  },
+  dense: {
+    marginTop: 16
+  },
+  menu: {
+    width: 200
+  }
+}))
 
 const CartItem = props => {
+  const classes = useStyles()
   const item = props.item
   const animalUrl = `/animals/${item.id}`
   return (
@@ -26,19 +45,18 @@ const CartItem = props => {
       <TableCell align="right">{item.price}</TableCell>
       <TableCell align="right">
         <TextField
-          select
+          className={classes.textField}
           id={`${item.id}`}
           name="quantity"
           type="number"
           value={item.quantity}
           onChange={event => props.handleChange(item.id, event)}
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(option => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
+          InputLabelProps={{
+            shrink: true
+          }}
+          margin="normal"
+          variant="outlined"
+        />
       </TableCell>
       <TableCell align="right">{item.quantity * item.price}</TableCell>
       <TableCell align="right">
