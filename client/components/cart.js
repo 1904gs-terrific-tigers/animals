@@ -64,7 +64,9 @@ export class Cart extends Component {
 
   render() {
     let localCart = JSON.parse(localStorage.getItem('cart'))
-
+    if (this.props.cart.length === 0) {
+      return <div>Please add an item to your cart</div>
+    }
     return (
       <Paper style={styles.paper}>
         <Table>
