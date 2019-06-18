@@ -12,10 +12,6 @@ export const PAYMENT_SERVER_URL =
 
 const fromDollarToCent = amount => amount * 100
 
-const successPayment = data => {
-  alert('Payment Successful')
-}
-
 const errorPayment = data => {
   console.error(data)
   alert('Issue paying!')
@@ -44,7 +40,6 @@ const Checkout = props => {
   if (props.cart.length === 0) {
     return <Redirect to="/" />
   }
-  console.log(props)
   return (
     <StripeCheckout
       name={name}
