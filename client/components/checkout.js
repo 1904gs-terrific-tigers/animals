@@ -37,7 +37,7 @@ const Checkout = props => {
     (acc, item) => acc + item.quantity * item.price,
     0
   )
-  if (props.cart.length === 0) {
+  if (props.cart.length === 0 || !props.isLoggedIn) {
     return <Redirect to="/" />
   }
   return (
@@ -52,7 +52,8 @@ const Checkout = props => {
   )
 }
 const mapStateToProps = state => ({
-  cart: state.cart
+  cart: state.cart,
+  isLoggedIn: !!state.user.id
 })
 
 export default connect(mapStateToProps)(withRouter(Checkout))
