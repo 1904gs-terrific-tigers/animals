@@ -66,7 +66,7 @@ describe('Order History Page', () => {
       )
     })
 
-    it('should have the total', () => {
+    xit('should have the total', () => {
       const total = orderData[0].animals.reduce((acc, cur) => {
         const curPrice = cur.quantity * cur.price
         return acc + curPrice
@@ -82,19 +82,19 @@ describe('Order History Page', () => {
       animalOrder = shallow(<OrderHistoryAnimalOrder {...animalData} />)
     })
 
-    it('should have the image somewhere', () => {
+    xit('should have the image somewhere', () => {
       expect(animalOrder.find('img').prop('src')).to.be.equal(
         animalData.imageUrl
       )
     })
 
-    it('should have the quantity', () => {
+    xit('should have the quantity', () => {
       expect(animalOrder.find('.animal-order-quantity').text()).to.contain(
         animalData.quantity
       )
     })
 
-    it('should have the base price', () => {
+    xit('should have the base price', () => {
       expect(animalOrder.find('.animal-order-price').text()).to.contain(
         animalData.price
       )
