@@ -1,6 +1,14 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getCart, remove, submit, updateCart, getAnimal} from '../store'
+import {
+  getCart,
+  remove,
+  removeItem,
+  submit,
+  updateQt,
+  updateCart,
+  getAnimal
+} from '../store'
 import CartItem from './cart-item'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -10,7 +18,6 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import TableFooter from '@material-ui/core/TableFooter'
 import Button from '@material-ui/core/Button'
-import axios from 'axios'
 
 const styles = {
   root: {
@@ -43,13 +50,16 @@ export class Cart extends Component {
   }
 
   handleRemove(id) {
-    this.props.removeItem(Number(id))
+    if (this.props.isLoggedIn) this.props.removeItem(Number(id))
+    else this.props.removeFromGuest(Number(id))
   }
   handleSubmit() {
     this.props.submitOrder()
   }
   handleChange(id, event) {
-    this.props.updatingCart(Number(id), Number(event.target.value))
+    if (this.props.isLoggedIn)
+      this.props.updatingCart(Number(id), Number(event.target.value))
+    else this.props.guestUpdate(Number(id), Number(event.target.value))
   }
 
   render() {
@@ -120,8 +130,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+  removeFromGuest: id => dispatch(removeItem(id)),
   getItem: () => dispatch(getCart()),
   updatingCart: (id, qt) => dispatch(updateCart(id, qt)),
+  guestUpdate: (id, qt) => dispatch(updateQt(id, qt)),
   submitOrder: () => dispatch(submit()),
   removeItem: id => dispatch(remove(id)),
   gettingAnimal: id => dispatch(getAnimal(id))
