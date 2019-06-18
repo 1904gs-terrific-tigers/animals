@@ -14,6 +14,7 @@ import {
 } from './components'
 import AdminAnimals from './components/admin/animals'
 import {me} from './store'
+import Container from '@material-ui/core/Container'
 
 /**
  * COMPONENT
@@ -26,6 +27,7 @@ class Routes extends Component {
   render() {
     const {isLoggedIn, isAdmin} = this.props
     return (
+ <Container style={{alignItems: 'flex-end'}}>
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
@@ -49,14 +51,12 @@ class Routes extends Component {
             {isAdmin && (
               <Route path="/admin/animals" component={AdminAnimals} />
             )}
-
-            <Route path="/orders" component={OrderHistory} />
-            <Route path="/thank-you" component={ThankYou} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
         <Route component={Login} />
       </Switch>
+</Container>
     )
   }
 }

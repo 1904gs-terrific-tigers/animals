@@ -52,11 +52,12 @@ describe('Single Animal', () => {
   })
 
   it('renders an input with a default of one', () => {
-    const input = singleAnimal.find('div.quantity input')
+    const input = singleAnimal.find('#quantity')
     expect(input.prop('name')).to.be.equal('quantity')
   })
 
   it('has a button to add to cart', () => {
-    expect(singleAnimal.find('button')).to.have.lengthOf(1)
+    const input = singleAnimal.find('#submit')
+    expect(input).to.have.lengthOf(1)
   })
 })
