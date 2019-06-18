@@ -63,22 +63,6 @@ router.post('/:animalId', async (req, res, next) => {
   }
 })
 
-// changes order to purchased
-router.put('/', async (req, res, next) => {
-  try {
-    const userId = req.user.id
-    const [order, created] = await Order.getCurrentOrderForUserId(userId)
-    if (!order.animals || order.animals.length === 0) {
-      return res.status(412).json({error: EmptyCartError})
-    }
-    order.set('purchased', true)
-    await order.save()
-    res.sendStatus(204)
-  } catch (error) {
-    next(error)
-  }
-})
-
 //changes quantity in cart for given item
 router.put('/:animalId', async (req, res, next) => {
   try {

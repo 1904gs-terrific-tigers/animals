@@ -9,15 +9,15 @@ import {
   updateCart,
   getAnimal
 } from '../store'
-import CartItem from './cart-item'
+import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
+import TableFooter from '@material-ui/core/TableFooter'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
-import TableFooter from '@material-ui/core/TableFooter'
-import Button from '@material-ui/core/Button'
+import {Checkout} from '.'
+import CartItem from './cart-item'
 
 const styles = {
   root: {
@@ -54,7 +54,7 @@ export class Cart extends Component {
     else this.props.removeFromGuest(Number(id))
   }
   handleSubmit() {
-    this.props.submitOrder()
+    this.props.history.push('/checkout')
   }
   handleChange(id, event) {
     if (this.props.isLoggedIn)
@@ -121,7 +121,7 @@ export class Cart extends Component {
         </Button>
       </Paper>
     )
-  }
+}
 }
 
 const mapStateToProps = state => {
