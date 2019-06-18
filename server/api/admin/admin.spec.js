@@ -35,8 +35,8 @@ describe('Admin routes', () => {
       })
     })
 
-    describe('/api/admin/animal', () => {
-      describe('POST /api/admin/animal', () => {
+    describe('/api/admin/animals', () => {
+      describe('POST /api/admin/animals', () => {
         it('creates a new animal with the passed data', async () => {
           // regular auth to make sure person is authorized
           const agent = request.agent(app)
@@ -49,7 +49,7 @@ describe('Admin routes', () => {
           }
 
           const res = await agent
-            .post('/api/admin/animal')
+            .post('/api/admin/animals')
             .send(animalData)
             .expect(201)
 
