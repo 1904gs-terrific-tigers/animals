@@ -1,15 +1,15 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {getCart, remove, submit, updateCart} from '../store'
-import CartItem from './cart-item'
+import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
+import TableFooter from '@material-ui/core/TableFooter'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
-import TableFooter from '@material-ui/core/TableFooter'
-import Button from '@material-ui/core/Button'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {Checkout} from '.'
+import {getCart, remove, updateCart} from '../store'
+import CartItem from './cart-item'
 
 const styles = {
   root: {
@@ -43,7 +43,7 @@ export class Cart extends Component {
     this.props.removeItem(Number(id))
   }
   handleSubmit() {
-    this.props.submitOrder()
+    this.props.history.push('/checkout')
   }
   handleChange(id, event) {
     console.log(event.target)
@@ -90,13 +90,7 @@ export class Cart extends Component {
               </TableRow>
             </TableFooter>
           </Table>
-          <Button
-            style={styles.button}
-            type="submit"
-            onClick={this.handleSubmit}
-          >
-            Submit Order
-          </Button>
+          <Checkout />
         </Paper>
       )
     } else return <div />
@@ -112,7 +106,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   getItem: () => dispatch(getCart()),
   updatingCart: (id, qt) => dispatch(updateCart(id, qt)),
-  submitOrder: () => dispatch(submit()),
   removeItem: id => dispatch(remove(id))
 })
 

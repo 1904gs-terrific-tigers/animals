@@ -9,6 +9,7 @@ import {
   OrderHistory,
   Signup,
   SingleAnimal,
+  ThankYou,
   UserHome
 } from './components'
 import {me} from './store'
@@ -39,6 +40,7 @@ class Routes extends Component {
             <Route path="/animals/:animalId" component={SingleAnimal} />
             <Route path="/cart" component={Cart} />
             <Route path="/orders" component={OrderHistory} />
+            <Route path="/thank-you" component={ThankYou} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
