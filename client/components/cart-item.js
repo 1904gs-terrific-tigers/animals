@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 import IconButton from '@material-ui/core/IconButton'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -11,6 +12,7 @@ import TextField from '@material-ui/core/TextField'
 
 const CartItem = props => {
   const item = props.item
+  const animalUrl = `/animals/${item.id}`
   return (
     <TableRow key={item.id}>
       <TableCell>
@@ -18,7 +20,9 @@ const CartItem = props => {
           <Avatar alt={item.name} src={item.imageUrl} />
         </ListItemAvatar>
       </TableCell>
-      <TableCell align="right">{item.name}</TableCell>
+      <TableCell align="right">
+        <Link to={animalUrl}>{item.name}</Link>
+      </TableCell>
       <TableCell align="right">{item.price}</TableCell>
       <TableCell align="right">
         <TextField
