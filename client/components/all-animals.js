@@ -61,7 +61,7 @@ export class AllAnimals extends React.Component {
       <div style={styles.root}>
         <GridList cellHeight={360} style={styles.gridList}>
           <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
-            <ListSubheader component="div">Animals</ListSubheader>
+            <ListSubheader component="div" />
           </GridListTile>
           {this.props.animals.map(animal => {
             const animalUrl = `/animals/${animal.id}`
