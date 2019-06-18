@@ -12,7 +12,7 @@ import {
   ThankYou,
   UserHome
 } from './components'
-import {Animals as AdminAnimals} from './components/admin/animals'
+import AdminAnimals from './components/admin/animals'
 import {me} from './store'
 
 /**
@@ -25,7 +25,6 @@ class Routes extends Component {
 
   render() {
     const {isLoggedIn, isAdmin} = this.props
-
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
@@ -70,7 +69,7 @@ const mapState = state => {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
     isLoggedIn: !!state.user.id,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin || false
   }
 }
 

@@ -1,5 +1,4 @@
 import Axios from 'axios'
-
 /**
  * ACTION TYPES
  */
@@ -16,7 +15,7 @@ const updatedAnimal = animal => ({
 /**
  * INITIAL STATE
  */
-const initialState = []
+const initialState = {}
 
 /**
  * THUNK CREATORS
@@ -37,13 +36,6 @@ export const updateAnimal = (id, animal) => {
  */
 export default (state = initialState, action) => {
   switch (action.type) {
-    case UPDATED_ANIMAL:
-      return state.map(animal => {
-        if (animal.id === action.id) {
-          return action.animal
-        }
-        return animal
-      })
     default:
       return state
   }

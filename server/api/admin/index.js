@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
   res.sendStatus(200)
 })
 
-router.post('/animal', async (req, res, next) => {
+router.post('/animals', async (req, res, next) => {
   try {
     const animal = await Animal.create(req.body)
     res.status(201).json(animal)
@@ -19,7 +19,7 @@ router.post('/animal', async (req, res, next) => {
   }
 })
 
-router.put('/animal/:animalId', async (req, res, next) => {
+router.put('/animals/:animalId', async (req, res, next) => {
   try {
     await Animal.update(req.body, {
       where: {
