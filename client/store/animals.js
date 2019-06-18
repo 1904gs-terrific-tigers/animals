@@ -1,11 +1,11 @@
 import axios from 'axios'
-import history from '../history'
 
 //INITIAL STATE
 const initialState = []
 
 //ACTION TYPES
 const GET_ANIMALS = 'GET_ANIMALS'
+const UPDATED_ANIMAL = 'UPDATED_ANIMAL'
 
 //ACTION CREATORS
 const getAnimals = animals => ({type: GET_ANIMALS, animals})
@@ -26,6 +26,13 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case GET_ANIMALS:
       return action.animals
+    case UPDATED_ANIMAL:
+      return state.map(animal => {
+        if (animal.id === action.id) {
+          return action.animal
+        }
+        return animal
+      })
     default:
       return state
   }
