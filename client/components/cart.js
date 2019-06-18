@@ -41,7 +41,6 @@ export class Cart extends Component {
     super()
 
     this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
     this.handleRemove = this.handleRemove.bind(this)
   }
 
@@ -113,10 +112,10 @@ export class Cart extends Component {
             </TableRow>
           </TableFooter>
         </Table>
-       <Checkout />
+        <Checkout />
       </Paper>
     )
-}
+  }
 }
 
 const mapStateToProps = state => {

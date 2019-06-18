@@ -42,6 +42,7 @@ const Checkout = props => {
   }
   return (
     <StripeCheckout
+      style={{width: '100%'}}
       name={name}
       description={description}
       amount={fromDollarToCent(amount)}
