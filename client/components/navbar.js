@@ -58,16 +58,6 @@ const Navbar = ({handleClick, isLoggedIn, cart}) => {
                 <Button
                   className={classes.menuButton}
                   component={Link}
-                  to="/home"
-                  variant="contained"
-                  color="primary"
-                >
-                  Home
-                </Button>
-
-                <Button
-                  className={classes.menuButton}
-                  component={Link}
                   to="/orders"
                   variant="contained"
                   color="primary"
