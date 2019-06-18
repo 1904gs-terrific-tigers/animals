@@ -60,7 +60,7 @@ describe('Admin routes', () => {
         })
       })
 
-      describe('PUT /api/admin/animal/:animalId', () => {
+      describe('PUT /api/admin/animals/:animalId', () => {
         let animal
         const animalData = {
           name: 'Lola',
@@ -82,7 +82,7 @@ describe('Admin routes', () => {
           }
 
           await agent
-            .put(`/api/admin/animal/${animal.id}`)
+            .put(`/api/admin/animals/${animal.id}`)
             .send(updatedInfo)
             .expect(204)
 
