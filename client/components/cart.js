@@ -53,9 +53,6 @@ export class Cart extends Component {
     if (this.props.isLoggedIn) this.props.removeItem(Number(id))
     else this.props.removeFromGuest(Number(id))
   }
-  handleSubmit() {
-    this.props.history.push('/checkout')
-  }
   handleChange(id, event) {
     if (this.props.isLoggedIn)
       this.props.updatingCart(Number(id), Number(event.target.value))
@@ -116,9 +113,7 @@ export class Cart extends Component {
             </TableRow>
           </TableFooter>
         </Table>
-        <Button style={styles.button} type="submit" onClick={this.handleSubmit}>
-          Submit Order
-        </Button>
+       <Checkout />
       </Paper>
     )
 }
