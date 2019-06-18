@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
-import {getAnimal, addItem} from '../store'
+import {getAnimal, addItem, addedItem} from '../store'
 
 import {makeStyles} from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -98,7 +98,10 @@ export const SingleAnimal = props => {
           <Button
             id="submit"
             type="submit"
-            onClick={() => props.addToCart(animal, quantity)}
+            onClick={() => {
+              if (props.isLoggedIn) props.addToCart(animal, quantity)
+              else props.addAnimalToGuest(animal, quantity)
+            }}
             variant="contained"
             color="primary"
             className={classes.button}
@@ -112,12 +115,14 @@ export const SingleAnimal = props => {
 }
 
 const mapStateToProps = state => ({
-  ...state.animal
+  ...state.animal,
+  isLoggedIn: !!state.user.id
 })
 
 const mapDispatchToProps = dispatch => ({
   getAnimal: id => dispatch(getAnimal(id)),
-  addToCart: (animal, qt) => dispatch(addItem(animal, qt))
+  addToCart: (animal, qt) => dispatch(addItem(animal, qt)),
+  addAnimalToGuest: (animal, qt) => dispatch(addedItem(animal, qt))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleAnimal)
