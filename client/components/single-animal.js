@@ -50,7 +50,7 @@ export const SingleAnimal = props => {
         type="submit"
         onClick={() => {
           if (props.isLoggedIn) props.addToCart(animal, quantity)
-          // else props.addAnimalToGuest(animal, quantity)
+          else props.addAnimalToGuest(animal, quantity)
         }}
       >
         Add to Cart
@@ -66,8 +66,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getAnimal: id => dispatch(getAnimal(id)),
-  addToCart: (animal, qt) => dispatch(addItem(animal, qt))
-  // addAnimalToGuest: (animal, qt) => dispatch(addedItem(animal, qt))
+  addToCart: (animal, qt) => dispatch(addItem(animal, qt)),
+  addAnimalToGuest: (animal, qt) => dispatch(addedItem(animal, qt))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleAnimal)
