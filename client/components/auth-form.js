@@ -1,36 +1,96 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+
+import Paper from '@material-ui/core/Paper'
+import TextField from '@material-ui/core/TextField'
+import {makeStyles} from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import {Link} from 'react-router-dom'
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    fontFamily: 'arial',
+    paddingBottom: 10,
+    width: '70%',
+    margin: 'auto',
+    marginTop: 10
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200
+  },
+  dense: {
+    marginTop: 19
+  },
+  menu: {
+    width: 200
+  },
+  menuButton: {
+    marginTop: theme.spacing(4),
+    marginRight: theme.spacing(2)
+  },
+  root: {
+    flexGrow: 1
+  }
+}))
+
+const makeOnChange = setter => event => {
+  setter(event.target.value)
+}
 
 /**
  * COMPONENT
  */
 const AuthForm = props => {
+  const classes = useStyles()
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
-    </div>
+    <Paper className={classes.paper}>
+      <div>
+        <form onSubmit={handleSubmit} name={name}>
+          <TextField
+            id="outlined-email-input"
+            label="Email"
+            className={classes.textField}
+            type="email"
+            name="email"
+            autoComplete="email"
+            margin="normal"
+            variant="outlined"
+          />
+
+          <TextField
+            id="outlined-password-input"
+            label="Password"
+            className={classes.textField}
+            type="password"
+            name="password"
+            autoComplete="password"
+            margin="normal"
+            variant="outlined"
+          />
+          <Button
+            type="submit"
+            className={classes.menuButton}
+            variant="contained"
+            color="primary"
+          >
+            {displayName}
+          </Button>
+          {error && error.response && <div> {error.response.data} </div>}
+        </form>
+      </div>
+      <div>
+        <Link to="/auth/google">{displayName} with Google</Link>
+      </div>
+    </Paper>
   )
 }
 
