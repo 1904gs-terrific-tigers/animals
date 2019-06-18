@@ -7,7 +7,7 @@ const STRIPE_PUBLISHABLE = 'pk_test_8pAUpsXNEuovkFkOlwrnnve900H2lDSFMo'
 const CURRENCY = 'USD'
 export const PAYMENT_SERVER_URL =
   process.env.NODE_ENV === 'production'
-    ? 'http://extreme-petting-zoo.herokuapp.com/api/checkout'
+    ? 'https://extreme-petting-zoo.herokuapp.com/api/checkout'
     : 'http://localhost:8080/api/checkout'
 
 const fromDollarToCent = amount => amount * 100

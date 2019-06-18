@@ -27,28 +27,28 @@ class Routes extends Component {
     const {isLoggedIn} = this.props
 
     return (
-      <Container style={{alignItems: 'flex-end'}}>
-        <Switch>
-          {/* Routes placed here are available to all visitors */}
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
+ <Container style={{alignItems: 'flex-end'}}>
+      <Switch>
+        {/* Routes placed here are available to all visitors */}
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/" exact component={AllAnimals} />
+        <Route path="/animals" exact component={AllAnimals} />
+        <Route path="/animals/:animalId" component={SingleAnimal} />
+        <Route path="/cart" component={Cart} />
 
-          {isLoggedIn && (
-            <Switch>
-              {/* Routes placed here are only available after logging in */}
-              <Route path="/home" component={UserHome} />
-              <Route path="/" exact component={AllAnimals} />
-              <Route path="/animals" exact component={AllAnimals} />
-              <Route path="/animals/:animalId" component={SingleAnimal} />
-              <Route path="/cart" component={Cart} />
-              <Route path="/orders" component={OrderHistory} />
-              <Route path="/thank-you" component={ThankYou} />
-            </Switch>
-          )}
-          {/* Displays our Login component as a fallback */}
-          <Route component={Login} />
-        </Switch>
-      </Container>
+        {isLoggedIn && (
+          <Switch>
+            {/* Routes placed here are only available after logging in */}
+            <Route path="/home" component={UserHome} />
+            <Route path="/orders" component={OrderHistory} />
+            <Route path="/thank-you" component={ThankYou} />
+          </Switch>
+        )}
+        {/* Displays our Login component as a fallback */}
+        <Route component={Login} />
+      </Switch>
+</Container>
     )
   }
 }

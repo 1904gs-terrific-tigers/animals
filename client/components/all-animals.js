@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {gettingAnimals} from '../store/animals'
-import {addItem} from '../store/cart'
+import {addItem, addedItem} from '../store/cart'
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
@@ -47,12 +47,13 @@ export class AllAnimals extends React.Component {
   }
 
   handleAddToCart(event, animal) {
-    // this is a really hacky way to do this but it works for now.
-    // if the structure below is changed, this will probably not work anymore
-
-    //jk comments.  I changed to a add to cart icon, which has no qty value, the qty is assumed to be one, which makes this less hacky.
+    //jk: I changed to a add to cart icon, which has no qty value,
+    //the qty is assumed to be one, which makes this less hacky.
     const qt = 1
-    this.props.addAnimalTocart(animal, qt)
+    if (this.props.isLoggedIn) this.props.addAnimalTocart(animal, qt)
+    else {
+      this.props.addAnimalToGuest(animal, qt)
+    }
   }
 
   render() {
@@ -95,11 +96,15 @@ export class AllAnimals extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {animals: state.animals}
+  return {
+    isLoggedIn: !!state.user.id,
+    animals: state.animals
+  }
 }
 
 const mapDispatchToProps = dispatch => ({
   getAnimals: () => dispatch(gettingAnimals()),
+  addAnimalToGuest: (animal, qt) => dispatch(addedItem(animal, qt)),
   addAnimalTocart: (animal, qt) => dispatch(addItem(animal, qt))
 })
 

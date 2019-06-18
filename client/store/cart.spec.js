@@ -31,7 +31,6 @@ let cartData = [
 describe('thunk creators', () => {
   let store
   let mockAxios
-
   const initialState = []
 
   beforeEach(() => {
