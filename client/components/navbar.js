@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Navbar = ({handleClick, isLoggedIn}) => {
+const Navbar = ({handleClick, isLoggedIn, cart}) => {
   const classes = useStyles()
 
   return (
@@ -47,7 +47,7 @@ const Navbar = ({handleClick, isLoggedIn}) => {
                 variant="contained"
                 color="primary"
               >
-                Shopping Cart
+                Shopping Cart {cart.length > 0 ? `(${cart.length})` : ''}
               </Button>
             </div>
             <Typography className={classes.title} color="inherit">
@@ -107,7 +107,6 @@ const Navbar = ({handleClick, isLoggedIn}) => {
                 </Button>
               </div>
             )}
-            <hr />
           </Toolbar>
         </div>
       </AppBar>
@@ -119,7 +118,8 @@ const Navbar = ({handleClick, isLoggedIn}) => {
  */
 const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    cart: state.cart
   }
 }
 
