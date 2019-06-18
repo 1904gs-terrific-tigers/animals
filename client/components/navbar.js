@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 const Navbar = ({handleClick, isLoggedIn, cart}) => {
   const classes = useStyles()
-
+  const cartQty = cart.reduce((accum, el) => el.quantity + accum, 0)
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{alignItems: 'center'}}>
@@ -47,7 +47,7 @@ const Navbar = ({handleClick, isLoggedIn, cart}) => {
                 variant="contained"
                 color="primary"
               >
-                Shopping Cart {cart.length > 0 ? `(${cart.length})` : ''}
+                Shopping Cart {cart.length > 0 ? `(${cartQty})` : ''}
               </Button>
             </div>
             <Typography className={classes.title} color="inherit">

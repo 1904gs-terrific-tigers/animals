@@ -22,7 +22,8 @@ const styles = {
   },
   paper: {
     width: '100%',
-    overflowX: 'auto'
+    overflowX: 'auto',
+    marginTop: 10
   },
   table: {
     minWidth: 650
