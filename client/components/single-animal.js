@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
-import {getAnimal, addItem} from '../store'
+import {getAnimal, addItem, addedItem} from '../store'
 
 //component
 
@@ -46,7 +46,13 @@ export const SingleAnimal = props => {
           />
         </span>
       </div>
-      <button type="submit" onClick={() => props.addToCart(animal, quantity)}>
+      <button
+        type="submit"
+        onClick={() => {
+          if (props.isLoggedIn) props.addToCart(animal, quantity)
+          // else props.addAnimalToGuest(animal, quantity)
+        }}
+      >
         Add to Cart
       </button>
     </div>
@@ -54,12 +60,14 @@ export const SingleAnimal = props => {
 }
 
 const mapStateToProps = state => ({
-  ...state.animal
+  ...state.animal,
+  isLoggedIn: !!state.user.id
 })
 
 const mapDispatchToProps = dispatch => ({
   getAnimal: id => dispatch(getAnimal(id)),
   addToCart: (animal, qt) => dispatch(addItem(animal, qt))
+  // addAnimalToGuest: (animal, qt) => dispatch(addedItem(animal, qt))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleAnimal)

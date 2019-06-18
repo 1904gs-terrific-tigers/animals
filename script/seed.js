@@ -40,7 +40,7 @@ async function seed() {
       price: 20
     }),
     Animal.create({
-      name: 'Debug with Cody',
+      name: 'Code with Cody',
       imageUrl:
         'https://cloud.githubusercontent.com/assets/12876798/24311104/b0035b0c-10a0-11e7-9c40-7ceb205206b5.png',
       description: `Cody the Pug is the unofficial mascot of Fullstack Academy of Code. Come rub Cody's belly and use him for all your rubber duck debugging needs (he is used to it, he might even opine on your choice of libraries). If your code compiles, he will lick your face.`,
@@ -62,15 +62,15 @@ async function seed() {
         'https://media.npr.org/assets/img/2017/07/23/baby-fiona_wide-c3a5b2cae6e072c2880a324b711ccc7eefafe3a2-s800-c85.jpg',
       description: `If you're not a fan of running, then try our free swimming workout`,
       species: 'hippopotamus',
-      price: 0
+      price: 100
     }),
     Animal.create({
-      name: 'Watch People Swim with Gloria',
+      name: 'Meditate with Soba and Udon',
       imageUrl:
-        'https://media.npr.org/assets/img/2017/07/23/baby-fiona_wide-c3a5b2cae6e072c2880a324b711ccc7eefafe3a2-s800-c85.jpg',
-      description: `While swimming with Gloria is free, watching people workout with her is a paid content for people over 18`,
-      species: 'hippopotamus',
-      price: 40
+        'https://iso.500px.com/wp-content/uploads/2015/07/snowmonkeys_cover.jpeg',
+      description: `Take a bath in our natural hot spring and ponder the meaning of life`,
+      species: 'snow monkey',
+      price: 400
     }),
     Animal.create({
       name: 'Swim with baby Needle',
