@@ -12,6 +12,8 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import TableFooter from '@material-ui/core/TableFooter'
 import Button from '@material-ui/core/Button'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import Avatar from '@material-ui/core/Avatar'
 
 const styles = {
   root: {
@@ -38,66 +40,73 @@ export const OrderHistory = props => {
 
   return (
     <Paper style={styles.paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell align="right" />
-            <TableCell align="right" />
-            <TableCell align="right" />
-            <TableCell align="right" />
-            <TableCell align="right" />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.orders.map(order => (
+      {props.orders.map(order => {
+        const orderUrl = `/orders/${order.id}`
+        return (
+          <div key={order.id}>
+            <Link to={orderUrl}>
+              <Button style={styles.button} type="submit">
+                Order Number: {order.id}
+              </Button>
+            </Link>
             <OrderHistoryItem {...order} key={order.id} />
-          ))}
-        </TableBody>
-      </Table>
+          </div>
+        )
+      })}
     </Paper>
   )
 }
 
 export const OrderHistoryItem = props => {
-  const orderUrl = `/orders/${props.id}`
   const total = props.animals.reduce((acc, cur) => {
     const curPrice = cur.quantity * cur.price
     return acc + curPrice
   }, 0)
   return (
-    <div className="order-item">
-      <Link to={orderUrl}>Purchased {props.boughtOn}</Link>
-      <div className="order-contents">
+    <Table style={styles.table}>
+      <TableHead>
+        <TableRow>
+          <TableCell align="left">Items:</TableCell>
+          <TableCell align="right">Activity</TableCell>
+          <TableCell align="right">Price</TableCell>
+          <TableCell align="right">Quantity</TableCell>
+          <TableCell align="right">Subtotal</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
         {props.animals.map(animal => (
           <OrderHistoryAnimalOrder {...animal} key={animal.id} />
         ))}
-      </div>
-      <div className="order-total">Total: ${total}</div>
-    </div>
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell align="left">Puchased: {props.boughtOn}</TableCell>
+          <TableCell align="right" />
+          <TableCell align="right" />
+          <TableCell align="right" />
+          <TableCell align="right">Total Puchase: {total}</TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
   )
 }
 
 export const OrderHistoryAnimalOrder = props => {
   const animalUrl = `/animals/${props.id}`
   return (
-    <div className="animal-order ">
-      <div className="animal-order-left">
-        <Link to={animalUrl}>
-          <img
-            style={{maxWidth: '100px', maxHeight: '100px'}}
-            src={props.imageUrl}
-          />
-        </Link>
-        <span className="animal-order-quantity">{props.quantity}</span>
-      </div>
-      <div className="animal-order-name">
-        <Link to={animalUrl}>
-          <span>{props.name}</span>
-        </Link>
-      </div>
-      <div className="animal-order-price">{props.price}</div>
-    </div>
+    <TableRow key={props.id}>
+      <TableCell>
+        <ListItemAvatar>
+          <Avatar alt={props.name} src={props.imageUrl} />
+        </ListItemAvatar>
+      </TableCell>
+      <TableCell align="right">
+        <Link to={animalUrl}>{props.name}</Link>
+      </TableCell>
+      <TableCell align="right">{props.price}</TableCell>
+      <TableCell align="right">{props.quantity}</TableCell>
+      <TableCell align="right">{props.quantity * props.price}</TableCell>
+    </TableRow>
   )
 }
 
