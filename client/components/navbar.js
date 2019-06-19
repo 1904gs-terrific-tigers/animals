@@ -1,13 +1,13 @@
+import AppBar from '@material-ui/core/AppBar'
+import Button from '@material-ui/core/Button'
+import {makeStyles} from '@material-ui/core/styles'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
-import Button from '@material-ui/core/Button'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import {makeStyles} from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 const Navbar = ({handleClick, isLoggedIn, cart}) => {
   const classes = useStyles()
-  const cartQty = cart.reduce((accum, el) => el.quantity + accum, 0)
+  const cartQty = cart.reduce((accum, el) => +el.quantity + accum, 0)
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{alignItems: 'center'}}>
