@@ -1,15 +1,13 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
-
+import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import Avatar from '@material-ui/core/Avatar'
-import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
+import {makeStyles} from '@material-ui/core/styles'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
-import {makeStyles} from '@material-ui/core/styles'
+import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
+import React from 'react'
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -52,7 +50,8 @@ const CartItem = props => {
           value={item.quantity}
           onChange={event => props.handleChange(item.id, event)}
           InputLabelProps={{
-            shrink: true
+            shrink: true,
+            min: 1
           }}
           margin="normal"
           variant="outlined"

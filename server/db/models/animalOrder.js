@@ -8,7 +8,9 @@ const AnimalOrder = db.define(
       type: Sequelize.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      min: 1 //no negative quantities
+      validate: {
+        min: 1 //no negative quantities
+      }
     },
     price: {
       type: Sequelize.INTEGER,
