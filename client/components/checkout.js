@@ -3,6 +3,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Redirect, withRouter} from 'react-router-dom'
 import StripeCheckout from 'react-stripe-checkout'
+import {submitOrder} from '../store'
 const STRIPE_PUBLISHABLE = 'pk_test_8pAUpsXNEuovkFkOlwrnnve900H2lDSFMo'
 const CURRENCY = 'USD'
 export const PAYMENT_SERVER_URL =
@@ -17,7 +18,7 @@ const errorPayment = data => {
   alert('Issue paying!')
 }
 
-const onToken = (amount, description, history) => async token => {
+const onToken = (amount, description, history, clearCart) => async token => {
   try {
     await axios.post(PAYMENT_SERVER_URL, {
       description,
@@ -25,6 +26,7 @@ const onToken = (amount, description, history) => async token => {
       currency: CURRENCY,
       amount: fromDollarToCent(amount)
     })
+    clearCart()
     history.push('/thank-you')
   } catch (error) {
     errorPayment(error)
@@ -46,7 +48,7 @@ const Checkout = props => {
       name={name}
       description={description}
       amount={fromDollarToCent(amount)}
-      token={onToken(amount, description, props.history)}
+      token={onToken(amount, description, props.history, props.clearCart)}
       currency={CURRENCY}
       stripeKey={STRIPE_PUBLISHABLE}
     />
@@ -56,4 +58,10 @@ const mapStateToProps = state => ({
   cart: state.cart
 })
 
-export default connect(mapStateToProps)(withRouter(Checkout))
+const mapDispatchToProps = dispatch => ({
+  clearCart: () => dispatch(submitOrder())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withRouter(Checkout)
+)

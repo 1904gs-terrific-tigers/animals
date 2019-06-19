@@ -14,7 +14,7 @@ const ADDED_ITEM = 'ADDED_ITEM'
  */
 const gotCart = cart => ({type: GOT_CART, cart})
 export const updateQt = (id, qt) => ({type: UPDATE_QUANTITY, id, qt})
-const submitOrder = () => ({type: SUBMIT_ORDER})
+export const submitOrder = () => ({type: SUBMIT_ORDER})
 export const removeItem = id => ({type: REMOVE_ITEM, id})
 export const addedItem = (animal, qt) => ({type: ADDED_ITEM, animal, qt})
 
