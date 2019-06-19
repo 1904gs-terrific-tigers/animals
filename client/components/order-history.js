@@ -38,6 +38,9 @@ export const OrderHistory = props => {
   useEffect(() => {
     props.getOrders()
   }, [])
+  if (props.orders.length === 0) {
+    return <div>Please purchase some of our animal experiences</div>
+  }
 
   return (
     <Paper style={styles.paper}>
