@@ -22,7 +22,8 @@ const styles = {
   },
   paper: {
     width: '100%',
-    overflowX: 'auto'
+    overflowX: 'auto',
+    marginTop: 10
   },
   table: {
     minWidth: 650
@@ -37,6 +38,9 @@ export const OrderHistory = props => {
   useEffect(() => {
     props.getOrders()
   }, [])
+  if (props.orders.length === 0) {
+    return <div>Please purchase some of our animal experiences</div>
+  }
 
   return (
     <Paper style={styles.paper}>
