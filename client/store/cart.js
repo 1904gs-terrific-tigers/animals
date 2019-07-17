@@ -41,7 +41,7 @@ export const updateCart = (id, qt) => {
   return async dispatch => {
     try {
       await Axios.put(`/api/cart/${id}`, {quantity: qt})
-      dispatch(updateQt(id, qt))
+      dispatch(updateQt(id, +qt))
     } catch (error) {
       console.error(error)
     }
@@ -74,7 +74,7 @@ export const addItem = (animal, qt) => {
   return async dispatch => {
     try {
       await Axios.post(`/api/cart/${animal.id}`, {quantity: qt})
-      dispatch(addedItem(animal, qt))
+      dispatch(addedItem(animal, +qt))
     } catch (err) {
       console.error(err)
     }
